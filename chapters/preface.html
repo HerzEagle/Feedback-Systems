@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前言 - 反馈系统</title>
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+<div class="layout-wrapper">
+      <aside class="sidebar">
+      <div class="sidebar-title"><a href="../index.html">反馈系统</a></div>
+      <nav aria-label="章节导航">
+        <ol class="nav-list">
+          <li><a class="active" href="../chapters/preface.html"><span>前</span>前言</a></li>
+          <li><a class="" href="../chapters/chapter-01.html"><span>01</span>引言</a></li>
+          <li><a class="" href="../chapters/chapter-02.html"><span>02</span>系统建模</a></li>
+          <li><a class="" href="../chapters/chapter-03.html"><span>03</span>例子</a></li>
+          <li><a class="" href="../chapters/chapter-04.html"><span>04</span>动态行为</a></li>
+          <li><a class="" href="../chapters/chapter-05.html"><span>05</span>线性系统</a></li>
+          <li><a class="" href="../chapters/chapter-06.html"><span>06</span>状态反馈</a></li>
+          <li><a class="" href="../chapters/chapter-07.html"><span>07</span>输出反馈</a></li>
+          <li><a class="" href="../chapters/chapter-08.html"><span>08</span>传递函数</a></li>
+          <li><a class="" href="../chapters/chapter-09.html"><span>09</span>频域分析</a></li>
+          <li><a class="" href="../chapters/chapter-10.html"><span>10</span>PID 控制</a></li>
+          <li><a class="" href="../chapters/chapter-11.html"><span>11</span>频域设计</a></li>
+          <li><a class="" href="../chapters/chapter-12.html"><span>12</span>鲁棒性能</a></li>
+          <li><a class="" href="../chapters/bibliography.html"><span>文</span>文献列表</a></li>
+        </ol>
+      </nav>
+    </aside>
+      <main class="main-content">
+        <div class="toolbar" aria-label="阅读工具">
+      <button class="toolbar-btn" id="fontDecrease" type="button" title="减小字号">A-</button>
+      <button class="toolbar-btn" id="fontIncrease" type="button" title="增大字号">A+</button>
+      <button class="toolbar-btn" id="themeToggle" type="button">护眼模式</button>
+    </div>
+        <article class="content-area serif-content">
+          <h1 id="前言">前言</h1>
+<p>本书介绍反馈系统设计与分析的基本原理和工具。我们希望它能服务于背景各异的科学家和工程师，帮助他们理解并运用物理系统、生物系统、信息系统和社会系统中的反馈。写作时，我们尽量把数学预备知识保持在较低水平，同时不牺牲论述的严谨性。书中也尽量选用来自不同学科的例子，一方面说明许多工具具有普遍性，另一方面展示它们如何落到具体应用领域中。</p>
+<p>本书的一个重要目标，是以简明而有洞察力的方式呈现反馈与控制系统领域目前的知识。控制领域早期的教学方式，是把当时已经知道的一切都教给学生；随着新知识不断出现，又发展出更多课程来覆盖新的技术。这样演变的结果是，许多入门课程多年保持不变，而学生往往需要修读多门单独课程，才能对这个领域形成良好视野。我们编写本书时，试图通过强调基本概念来压缩并重组这些知识。我们认为，理解反馈为什么有用，掌握控制的语言和基本数学，抓住过去半个世纪形成的关键范式，这些都很重要。同样重要的是，能够用简明估算方法解决简单反馈问题，能够识别基本限制和困难控制问题，并对可用的设计方法形成感觉。</p>
+<p>本书最初是为加州理工学院一门实验性课程编写的，那门课面向背景很宽的学生。传统工程学科三、四年级本科生，以及工程和科学方向一、二年级研究生都曾选修，其中包括生物、计算机科学和物理方向的研究生。几年来，这份教材先后在加州理工学院和隆德大学的课堂中试用，许多学生和同事的反馈都被吸收进来，用来提高材料的可读性和可进入性。</p>
+<p>由于读者对象较宽，本书的组织方式与许多反馈和控制教材相比略有不同。特别是，书中引入了一些通常留到控制二年级课程才讲的概念，因此非控制系统专业的学生也能接触到它们。为此，我们相应弱化了一些传统主题；我们认为，敏锐的学生可以通过自学掌握这些内容，它们也常常通过习题来展开。书中纳入的主题包括非线性动力学、李雅普诺夫稳定性分析、矩阵指数、可达性和可观性，以及性能与鲁棒性的基本限制。相对淡化的主题包括根轨迹技术、超前和滞后补偿，以及手工绘制伯德图和奈奎斯特图的详细规则。</p>
+<p>本书既要作为基础工程教材，也要作为自然科学、信息科学和社会科学研究者的入门书，因此设计了若干辅助特征。大部分材料不依赖特定读者背景，覆盖反馈系统分析和设计中的核心原理与工具。带有危险弯道符号的高级小节，包含需要稍强技术背景的材料，大致相当于工程高年级本科生应具备的背景。少数小节标有两个危险弯道符号，面向背景更专门的读者，具体要求会在小节开头说明。为了控制篇幅，一些标准结果和扩展内容放入习题，并给出适当提示。</p>
+<p>为了补充纸质内容，出版社网页还提供了配套网站：http://press.princeton.edu/titles/8701.html。网站包含常见问题数据库、补充例子和习题，以及基于本书开课时可用的授课材料。材料按章节组织，既有各章重点摘要，也有外部资源链接。网站还提供书中许多例子的源代码，以及实现正文技术的工具程序。大部分代码最初用 MATLAB M 文件编写，同时也用 LabView MathScript 测试过，以保证与两种软件包兼容。许多文件也可以用 Octave、SciLab、SysQuake 和 Xmath 等脚本语言运行。</p>
+<p>本书前半部分几乎完全聚焦状态空间控制系统。第 2 章首先说明如何用常微分方程和差分方程为物理系统、生物系统和信息系统建模。第 3 章较详细地给出若干例子，主要作为后文反复使用的问题背景。随后，第 4 章考察模型的动态行为，包括稳定性的定义以及更复杂的非线性行为。本章设置了关于李雅普诺夫稳定性分析的高级小节，因为我们发现它在广泛应用中都很有用，而且往往到较后阶段才被引入。</p>
+<p>前半部分余下三章集中讨论线性系统。第 5 章从输入输出行为开始，第 6 章通过展示如何设计状态空间控制律，正式引入反馈系统。第 7 章接着讨论输出反馈和估计器。第 6 章和第 7 章引入可达性与可观性两个关键概念；无论面对工程系统还是自然系统，它们都能为执行器和传感器的选择提供深刻洞察。</p>
+<p>本书后半部分呈现的材料，常被视为经典控制领域的内容。第 8 章引入传递函数，这是理解反馈系统的基本工具。借助传递函数，人们可以使用频域分析来研究反馈系统稳定性，并能够从系统开环特性推断闭环行为。第 9 章讨论的正是这一主题，其核心是奈奎斯特稳定性判据。</p>
+<p>第 10 章和第 11 章再次转向设计问题，先讨论比例积分微分控制器，即 PID 控制器，再讨论更一般的环路整形过程。PID 控制是控制系统中最常见的设计技术，对任何学生来说都是有用工具。频域设计一章引入现代控制理论中的许多思想，包括灵敏度函数。第 12 章综合后半部分的结果，分析鲁棒性与性能之间的一些基本权衡。这一章也展示了前面发展出的技术有多强大，并为更高级的学习提供入口。</p>
+<p>本书适合用于 10 到 15 周的反馈系统课程，提供许多学科都会用到的关键概念。如果课程为 10 周，第 1 到 2 章、第 4 到 6 章以及第 8 到 11 章可以各用一周讲完，并在最后几章中略去部分主题。若课程较从容，安排为 14 到 15 周，则可以覆盖全书；其中建模部分，也就是第 2 章和第 3 章，尤其适合给缺少常微分方程背景的学生安排两周；鲁棒性能，也就是第 12 章，也可以安排两周。</p>
+<p>本书对数学预备知识的要求并不高，这与我们希望服务广泛读者的目标一致。我们假定读者熟悉线性代数的基本工具，包括矩阵、向量和特征值。这些内容通常在大学二年级线性代数课程中讲授，Apostol <sup class="citation">[<a href="bibliography.html#ref-10">10</a>]</sup>、Arnold <sup class="citation">[<a href="bibliography.html#ref-13">13</a>]</sup> 和 Strang <sup class="citation">[<a href="bibliography.html#ref-187">187</a>]</sup> 的教材都可作为良好参考。类似地，我们假定读者具有微分方程的基本知识，包括一元线性常微分方程的齐次解和特解等概念。Apostol <sup class="citation">[<a href="bibliography.html#ref-10">10</a>]</sup> 以及 Boyce 和 DiPrima <sup class="citation">[<a href="bibliography.html#ref-42">42</a>]</sup> 对这些材料有很好的介绍。最后，我们还会使用复数和复函数；在某些高级小节中，还会用到复变函数中更细致的概念，这些通常出现在工程或物理三年级数学方法课程中。基础材料可参考 Apostol <sup class="citation">[<a href="bibliography.html#ref-9">9</a>]</sup> 或 Stewart <sup class="citation">[<a href="bibliography.html#ref-186">186</a>]</sup>，更高级材料可参考 Ahlfors <sup class="citation">[<a href="bibliography.html#ref-6">6</a>]</sup>、Marsden 和 Hoffman <sup class="citation">[<a href="bibliography.html#ref-146">146</a>]</sup>，或 Saff 和 Snider <sup class="citation">[<a href="bibliography.html#ref-172">172</a>]</sup>。我们没有为这些主题添加综述性附录，因为已有不少优秀书籍可用。</p>
+<p>我们还做了一个重要选择：本书不依赖拉普拉斯变换知识。虽然在工程学中，用拉普拉斯变换讲授反馈系统最为常见，但自然科学和信息科学的许多学生可能缺少相应数学背景。由于拉普拉斯变换并非本书核心内容所必需，我们只在一个高级小节中介绍它，用来帮助已有相关背景的学生把概念联系起来。当然，我们大量使用传递函数；我们通过指数输入响应来引入传递函数，这种方式对广泛的科学家和工程师来说更容易进入。对于已经学过拉普拉斯变换的班级，在正文相应部分自然可以沿用这方面背景。</p>
+<h2 id="致谢">致谢</h2>
+<p>两位作者感谢许多人在本书准备过程中给予的帮助。写作本书的想法，部分来自一份关于控制未来方向的报告 <sup class="citation">[<a href="bibliography.html#ref-155">155</a>]</sup>，Stephen Boyd、Roger Brockett、John Doyle 和 Gunter Stein 都是那份报告的重要贡献者。Kristi Morgansen 和 Hideo Mabuchi 曾帮助讲授加州理工学院早期版本的课程，本书许多材料都以那门课为基础；Steve Waydo 在 2003 到 2004 年加州理工学院开课时担任首席助教，并提供了许多意见和修正。Charlotta Johnsson 和 Anton Cervin 在 2003 到 2007 年于隆德使用早期手稿授课，给出了很有价值的反馈。</p>
+<p>提供反馈和建议的其他同事与学生包括 Leif Andersson、John Carson、K. Mani Chandy、Michel Charpentier、Domitilla Del Vecchio、Kate Galloway、Per Hagander、Toivo Henningsson Perby、Joseph Hellerstein、George Hines、Tore Hägglund、Cole Lepine、Anders Rantzer、Anders Robertsson、Dawn Tilbury 和 Francisco Zabala。普林斯顿大学出版社的评审人以及 NI Press 的 Tom Robbins 也给出了宝贵意见，显著改善了本书的组织、版式和重点。责任编辑 Vickie Kearn 在整个出版过程中一直给予我们很大鼓励和帮助。最后，我们感谢加州理工学院、隆德大学和加州大学圣巴巴拉分校提供大量资源、富有激发性的同事和学生，以及令人愉快的工作环境，这些都极大帮助了本书写作。</p>
+<p>卡尔·约翰·奥斯特罗姆，瑞典隆德<br>理查德·M. 默里，加利福尼亚州帕萨迪纳和圣巴巴拉</p>
+        </article>
+        <div class="pagination"><span></span><a href="chapter-01.html" class="page-btn">下一章：引言 →</a></div>
+      </main>
+    </div>
+<button id="backToTop" title="回到顶部" type="button">↑</button>
+<script src="../script.js"></script>
+</body>
+</html>

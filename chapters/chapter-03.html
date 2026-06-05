@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 3 章 例子 - 反馈系统</title>
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+<div class="layout-wrapper">
+      <aside class="sidebar">
+      <div class="sidebar-title"><a href="../index.html">反馈系统</a></div>
+      <nav aria-label="章节导航">
+        <ol class="nav-list">
+          <li><a class="" href="../chapters/preface.html"><span>前</span>前言</a></li>
+          <li><a class="" href="../chapters/chapter-01.html"><span>01</span>引言</a></li>
+          <li><a class="" href="../chapters/chapter-02.html"><span>02</span>系统建模</a></li>
+          <li><a class="active" href="../chapters/chapter-03.html"><span>03</span>例子</a></li>
+          <li><a class="" href="../chapters/chapter-04.html"><span>04</span>动态行为</a></li>
+          <li><a class="" href="../chapters/chapter-05.html"><span>05</span>线性系统</a></li>
+          <li><a class="" href="../chapters/chapter-06.html"><span>06</span>状态反馈</a></li>
+          <li><a class="" href="../chapters/chapter-07.html"><span>07</span>输出反馈</a></li>
+          <li><a class="" href="../chapters/chapter-08.html"><span>08</span>传递函数</a></li>
+          <li><a class="" href="../chapters/chapter-09.html"><span>09</span>频域分析</a></li>
+          <li><a class="" href="../chapters/chapter-10.html"><span>10</span>PID 控制</a></li>
+          <li><a class="" href="../chapters/chapter-11.html"><span>11</span>频域设计</a></li>
+          <li><a class="" href="../chapters/chapter-12.html"><span>12</span>鲁棒性能</a></li>
+          <li><a class="" href="../chapters/bibliography.html"><span>文</span>文献列表</a></li>
+        </ol>
+      </nav>
+    </aside>
+      <main class="main-content">
+        <div class="toolbar" aria-label="阅读工具">
+      <button class="toolbar-btn" id="fontDecrease" type="button" title="减小字号">A-</button>
+      <button class="toolbar-btn" id="fontIncrease" type="button" title="增大字号">A+</button>
+      <button class="toolbar-btn" id="themeToggle" type="button">护眼模式</button>
+    </div>
+        <article class="content-area serif-content">
+          <h1 id="第-3-章-例子">第 3 章 例子</h1>
+<blockquote class="chapter-epigraph">
+  <p class="epigraph-text">……在理解一个模型所依据的简化假设，并能检验这些假设是否有效之前，不要使用任何模型。口号是：只按说明使用。不要把自己限制在单一模型上：同一现象的不同方面，可能需要不止一个模型来理解。口号是：让多配偶制合法化。</p>
+  <footer class="epigraph-source">索尔·戈洛姆，《数学模型：用途与局限》，1970 <sup class="citation">[<a href="bibliography.html#ref-87">87</a>]</sup>。</footer>
+</blockquote>
+<p>本章给出一组例子，覆盖科学和工程中的许多不同领域。后文和习题会反复使用这些例子来说明不同概念。初读本书时，读者可以只关注少数几个自己已有经验或直觉较多的例子，以便在熟悉语境中理解状态、输入、输出和动态这些概念。</p>
+<h2 id="3.1-巡航控制">3.1 巡航控制</h2>
+<p>汽车巡航控制系统是日常生活中常见的反馈系统。这个系统试图在存在扰动时保持恒定速度，扰动主要来自道路坡度变化。控制器通过测量汽车速度并适当调节节流阀，来补偿这些未知因素。</p>
+<p>为了建模系统，我们从图 3.1 的框图开始。令 \(v\) 表示汽车速度，\(v_r\) 表示期望速度，也就是参考速度。控制器通常是第 1 章简要介绍过的比例积分 PI 类型，它接收信号 \(v\) 与 \(v_r\)，产生控制信号 \(u\)，并把该信号送到控制节流阀位置的执行器。节流阀进而控制发动机输出转矩 \(T\)，转矩通过齿轮和车轮传递，产生驱动汽车的力 \(F\)。由于道路坡度变化、滚动阻力和气动力，还会出现扰动力 \(F_d\)。巡航控制器还具有人机接口，使驾驶员能够设定和修改期望速度。系统也有一些功能，例如一旦触碰刹车就断开巡航控制。</p>
+<figure class="figure-block"><img alt="图 3.1" loading="lazy" src="../assets/figures/chapter-03/fig-3-1.png"/><figcaption>图 3.1：汽车巡航控制系统框图。由节流阀控制的发动机产生转矩 \(T\)，该转矩通过变速箱和车轮传到地面。它与环境产生的外力，例如空气阻力和坡道上的重力分量，共同决定净力，进而使汽车运动。汽车速度 \(v\) 由控制系统测量，控制系统通过执行机构调节节流阀。驾驶员接口允许系统开启和关闭，并建立参考速度 \(v_r\)。</figcaption></figure>
+<p>系统有许多单独部件，包括执行器、发动机、传动系统、车轮和车身，因此详细模型可能非常复杂。尽管如此，设计巡航控制器所需的模型可以很简单。</p>
+<p>为了建立数学模型，我们从车身的受力平衡开始。令 \(v\) 为汽车速度，\(m\) 为总质量，包括乘客，\(F\) 为车轮与道路接触产生的力，\(F_d\) 为由重力、摩擦和空气阻力造成的扰动力。汽车运动方程很简单：</p>
+<div class="math-block">\[
+m\frac{dv}{dt}=F-F_d.
+\tag{3.1}
+\]</div>
+<p>力 \(F\) 由发动机产生。发动机转矩与燃油喷射率成正比，而燃油喷射率本身又与控制节流阀位置的控制信号 \(0\le u\le 1\) 成正比。转矩还取决于发动机转速 \(\omega\)。全节流阀下转矩的一个简单表示为</p>
+<div class="math-block">\[
+T(\omega)=T_m\left(1-\beta\left(\frac{\omega}{\omega_m}-1\right)^2\right),
+\tag{3.2}
+\]</div>
+<p>其中最大转矩 \(T_m\) 在发动机转速 \(\omega_m\) 处取得。典型参数为 \(T_m=190\) Nm，\(\omega_m=420\) rad/s，约为 4000 RPM，\(\beta=0.4\)。令 \(n\) 为传动比，\(r\) 为车轮半径。发动机转速与速度之间满足</p>
+<div class="math-block">\[
+\omega=\frac{n}{r}v=:\alpha_n v,
+\]</div>
+<p>驱动力可写为</p>
+<div class="math-block">\[
+F=\frac{nu}{r}T(\omega)=\alpha_nuT(\alpha_nv).
+\]</div>
+<p>1 到 5 挡的 \(\alpha_n\) 典型值为 \(\alpha_1=40\)、\(\alpha_2=25\)、\(\alpha_3=16\)、\(\alpha_4=12\)、\(\alpha_5=10\)。\(\alpha_n\) 的倒数可解释为有效车轮半径。图 3.2 显示转矩如何随发动机转速和车辆速度变化。图中可见，挡位的作用是把转矩曲线展平，使几乎整个速度范围内都能获得接近满值的转矩。</p>
+<figure class="figure-block"><img alt="图 3.2" loading="lazy" src="../assets/figures/chapter-03/fig-3-2.png"/><figcaption>图 3.2：典型汽车发动机的转矩曲线。左图显示发动机产生的转矩如何依赖发动机角速度，右图显示不同挡位下转矩如何依赖汽车速度。</figcaption></figure>
+<p>扰动力 \(F_d\) 主要有三个组成部分：由重力造成的 \(F_g\)、由滚动摩擦造成的 \(F_r\)，以及空气阻力 \(F_a\)。令道路坡度为 \(\theta\)，重力给出力 \(F_g=mg\sin\theta\)，如图 3.3a 所示，其中 \(g=9.8\ \text{m/s}^2\) 是重力常数。滚动摩擦的简单模型为</p>
+<div class="math-block">\[
+F_r=mgC_r\operatorname{sgn}(v),
+\]</div>
+<p>其中 \(C_r\) 是滚动摩擦系数，\(\operatorname{sgn}(v)\) 是 \(v\) 的符号，即 \(\pm1\)，当 \(v=0\) 时为 0。滚动摩擦系数的典型值为 \(C_r=0.01\)。最后，空气阻力与速度平方成正比：</p>
+<div class="math-block">\[
+F_a=\frac{1}{2}\rho C_dAv^2,
+\]</div>
+<p>其中 \(\rho\) 是空气密度，\(C_d\) 是取决于形状的空气阻力系数，\(A\) 是汽车迎风面积。典型参数为 \(\rho=1.3\ \text{kg/m}^3\)、\(C_d=0.32\)、\(A=2.4\ \text{m}^2\)。</p>
+<p>综合起来，汽车可由下式建模：</p>
+<div class="math-block">\[
+m\frac{dv}{dt}
+=\alpha_nuT(\alpha_nv)-mgC_r\operatorname{sgn}(v)
+-\frac{1}{2}\rho C_dAv^2-mg\sin\theta,
+\tag{3.3}
+\]</div>
+<p>其中函数 \(T\) 由式 (3.2) 给出。模型 (3.3) 是一阶动态系统。状态是汽车速度 \(v\)，它也是输出。输入是控制节流阀位置的信号 \(u\)，扰动是力 \(F_d\)，它依赖道路坡度。由于转矩曲线、重力项，以及滚动摩擦和空气阻力的非线性特征，系统是非线性的。参数也可能变化，例如汽车质量取决于乘客人数和车内载荷。</p>
+<p>在这个模型上，我们加入一个反馈控制器，试图在存在扰动时调节汽车速度。这里使用比例积分控制器，其形式为</p>
+<div class="math-block">\[
+u(t)=k_pe(t)+k_i\int_0^t e(\tau)\,d\tau.
+\]</div>
+<p>这个控制器本身也可以作为输入输出动态系统实现。定义控制器状态 \(z\)，并实现微分方程</p>
+<div class="math-block">\[
+\frac{dz}{dt}=v_r-v,\qquad
+u=k_p(v_r-v)+k_iz,
+\tag{3.4}
+\]</div>
+<p>其中 \(v_r\) 是期望速度，也就是参考速度。如第 1.5 节简要讨论的，积分器由状态 \(z\) 表示，它保证即使存在扰动或建模误差，稳态误差也会被驱动到零。PI 控制器设计是第 10 章的主题。图 3.3b 显示由式 (3.3) 和式 (3.4) 组成的闭环系统遇到坡道时的响应。图中显示，即使坡度足以使节流阀从 0.17 变到几乎全开，最大速度误差也小于 1 m/s，并且约 20 s 后恢复期望速度。</p>
+<figure class="figure-block"><img alt="图 3.3" loading="lazy" src="../assets/figures/chapter-03/fig-3-3.png"/><figcaption>图 3.3：带巡航控制的汽车遇到坡道。图 a 为示意图，图 b 显示遇到 \(4^\circ\) 坡道时速度和节流阀的响应。坡道建模为坡角 \(\theta\) 净变化 \(4^\circ\)，且在 \(t=5\) 到 \(t=6\) 之间线性变化。PI 控制器的比例增益为 \(k_p=0.5\)，积分增益为 \(k_i=0.1\)。</figcaption></figure>
+<p>推导模型 (3.3) 时做了许多近似。这样一个看起来复杂的系统竟能由如此简单的模型描述，或许令人意外。重要的是，我们必须把模型使用限制在图 2.15b 所概念化的不确定性柠檬范围内。这个模型不适用于节流阀的非常快速变化，因为我们忽略了发动机动态的细节；也不适用于非常缓慢的变化，因为发动机性质会随多年使用而改变。尽管如此，这个模型对巡航控制系统设计非常有用。后文会看到，原因在于反馈系统内在的鲁棒性：即使模型并不完全准确，我们仍可用它设计控制器，并利用控制器中的反馈管理系统不确定性。</p>
+<p>巡航控制系统还有一个人机接口，使驾驶员能够与系统通信。这个系统有许多实现方式，其中一种如图 3.4 所示。系统有四个按钮：开关、设定或减速、恢复或加速、取消。系统运行由一个有限状态机管理，该状态机控制 PI 控制器和参考生成器的模式。控制器和参考生成器的实现会在第 10 章更充分地讨论。</p>
+<figure class="figure-block"><img alt="图 3.4" loading="lazy" src="../assets/figures/chapter-03/fig-3-4.png"/><figcaption>图 3.4：巡航控制系统的有限状态机。左图显示控制系统的一些典型按钮。控制器可以处于四种模式之一，对应右图中的节点。模式之间的转换由巡航控制接口上的五个按钮控制：on、off、set、resume 和 cancel。</figcaption></figure>
+<p>汽车系统中的控制应用远远超过这里描述的简单巡航控制系统。应用包括排放控制、牵引力控制、动力控制，尤其是在混合动力车辆中，以及自适应巡航控制。Kiencke 和 Nielsen 的书 <sup class="citation">[<a href="bibliography.html#ref-124">124</a>]</sup> 以及 Powers 等人的综述论文 <sup class="citation">[<a href="bibliography.html#ref-22">22</a>, <a href="bibliography.html#ref-166">166</a>]</sup> 详细讨论了许多汽车应用。</p>
+<h2 id="3.2-自行车动态">3.2 自行车动态</h2>
+<p>自行车是一个有趣的动态系统，它的一个关键性质来自前叉设计所形成的反馈机制。自行车的详细模型很复杂，因为系统有许多自由度，几何形状也复杂。不过，简单模型已经能提供大量洞见。</p>
+<p>为了推导运动方程，我们假设自行车在水平 \(xy\) 平面上滚动。引入一个固定在自行车上的坐标系，其中 \(\xi\) 轴穿过车轮与地面接触点，\(\eta\) 轴水平，\(\zeta\) 轴竖直，如图 3.5 所示。令 \(v_0\) 为自行车在后轮处的速度，\(b\) 为轴距，\(\phi\) 为倾斜角，\(\delta\) 为转向角。该坐标系围绕点 \(O\) 以角速度 \(\omega=v_0\delta/b\) 旋转，固定在自行车上的观察者会感受到由坐标系运动引起的力。</p>
+<figure class="figure-block"><img alt="图 3.5" loading="lazy" src="../assets/figures/chapter-03/fig-3-5.png"/><figcaption>图 3.5：自行车示意图。转向角为 \(\delta\)，滚转角为 \(\phi\)。质心高度为 \(h\)，它与后轮接触点 \(P_1\) 竖直线之间的距离为 \(a\)。轴距为 \(b\)，曳距为 \(c\)。</figcaption></figure>
+<p>自行车的倾斜运动类似于倒立摆，如图 3.5b 后视图所示。为了建模倾斜，考虑一个刚体，它由车轮、骑行者和前叉组件相对车架固定后得到。令 \(m\) 为系统总质量，\(J\) 为该刚体相对于 \(\xi\) 轴的转动惯量，\(D\) 为相对于 \(\xi\zeta\) 轴的惯性积。此外，令质心相对于后轮接触点 \(P_1\) 的 \(\xi\) 与 \(\zeta\) 坐标分别为 \(a\) 和 \(h\)。我们有 \(J\approx mh^2\)，\(D=mah\)。作用在系统上的力矩来自重力和向心作用。假设转向角 \(\delta\) 很小，运动方程变为</p>
+<div class="math-block">\[
+J\frac{d^2\phi}{dt^2}
+-D\frac{v_0}{b}\frac{d\delta}{dt}
+=mgh\sin\phi+\frac{mv_0^2h}{b}\delta.
+\tag{3.5}
+\]</div>
+<p>项 \(mgh\sin\phi\) 是重力产生的力矩。含有 \(\delta\) 及其导数的项是转向产生的力矩，其中 \((Dv_0/b)d\delta/dt\) 来自惯性力，\((mv_0^2h/b)\delta\) 来自向心力。</p>
+<p>转向角受到骑行者施加到车把上的力矩影响。由于转向轴倾斜以及前叉形状，前轮与道路接触点 \(P_2\) 位于前轮组件转轴之后，如图 3.5c 所示。前轮接触点 \(P_2\) 与前叉组件转轴投影点 \(P_3\) 之间的距离 \(c\) 称为曳距。自行车转向性质关键依赖曳距。大曳距提高稳定性，但降低转向灵活性。</p>
+<p>前叉设计带来的一个后果是，转向角 \(\delta\) 同时受到转向力矩 \(T\) 和车架倾斜 \(\phi\) 的影响。这意味着带前叉的自行车是一个反馈系统，如图 3.6 的框图所示。转向角 \(\delta\) 影响倾斜角 \(\phi\)，倾斜角又影响转向角，由此产生反馈推理中典型的循环因果关系。对具有正曳距的前叉来说，自行车会朝倾斜方向转向，产生试图减小倾斜的离心力。在某些条件下，这种反馈确实可以稳定自行车。</p>
+<figure class="figure-block"><img alt="图 3.6" loading="lazy" src="../assets/figures/chapter-03/fig-3-6.png"/><figcaption>图 3.6：带前叉自行车的框图。施加在车把上的转向力矩为 \(T\)，滚转角为 \(\phi\)，转向角为 \(\delta\)。注意，前叉建立了从滚转角 \(\phi\) 到转向角 \(\delta\) 的反馈，在某些条件下可以稳定系统。</figcaption></figure>
+<p>一个粗略经验模型可通过假设前叉方框可建模为静态系统得到：</p>
+<div class="math-block">\[
+\delta=k_1T-k_2\phi.
+\tag{3.6}
+\]</div>
+<p>这个模型忽略了前叉动态、轮胎道路相互作用，以及参数依赖速度这一事实。更准确的模型称为 Whipple 模型，它通过前叉和车架的刚体动态得到。假设角度很小，该模型变为</p>
+<div class="math-block">\[
+M
+\begin{bmatrix}
+\ddot\phi\\\ddot\delta
+\end{bmatrix}
++Cv_0
+\begin{bmatrix}
+\dot\phi\\\dot\delta
+\end{bmatrix}
++(K_0+K_2v_0^2)
+\begin{bmatrix}
+\phi\\\delta
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\T
+\end{bmatrix},
+\tag{3.7}
+\]</div>
+<p>其中 \(2\times2\) 矩阵 \(M,C,K_0,K_2\) 的元素依赖自行车几何和质量分布。注意，这个形式与第 2 章中弹簧质量系统以及例 2.1 中平衡系统的形式有些相似。即便这个更复杂的模型也不准确，因为它忽略了轮胎与道路之间的相互作用；若要纳入这一点，需要两个额外状态变量。再次，图 2.15b 中的不确定性柠檬为理解这些假设下模型有效性提供了框架。</p>
+<p>D. Wilson <sup class="citation">[<a href="bibliography.html#ref-202">202</a>]</sup> 与 Herlihy <sup class="citation">[<a href="bibliography.html#ref-98">98</a>]</sup> 的书对自行车的发展给出了有趣介绍。模型 (3.7) 由 Whipple 在 1899 年的一篇论文中提出 <sup class="citation">[<a href="bibliography.html#ref-197">197</a>]</sup>。论文 <sup class="citation">[<a href="bibliography.html#ref-17">17</a>]</sup> 给出了自行车建模的更多细节，并包含许多参考文献。</p>
+<h2 id="3.3-运算放大器电路">3.3 运算放大器电路</h2>
+<p>运算放大器，简称运放，是 Black 反馈放大器的现代表现形式。它是广泛用于仪器、控制和通信的通用部件，也是模拟计算中的关键元件。图 3.7 给出了运算放大器的示意图。放大器有一个反相输入 \(v_-\)、一个同相输入 \(v_+\) 和一个输出 \(v_{\mathrm{out}}\)。它还有供电电压 \(e_-\)、\(e_+\) 的连接，以及零点调整，也称失调调零。一个简单模型假设输入电流 \(i_-\) 与 \(i_+\) 为零，并且输出由如下静态关系给出：</p>
+<div class="math-block">\[
+v_{\mathrm{out}}=\operatorname{sat}_{(v_{\min},v_{\max})}
+\left(k(v_+-v_-)\right),
+\tag{3.8}
+\]</div>
+<p>其中 \(\operatorname{sat}\) 表示饱和函数</p>
+<div class="math-block">\[
+\operatorname{sat}_{(a,b)}(x)=
+\begin{cases}
+a,&amp;x&lt;a,\\
+x,&amp;a\le x\le b,\\
+b,&amp;x&gt;b.
+\end{cases}
+\tag{3.9}
+\]</div>
+<figure class="figure-block"><img alt="图 3.7" loading="lazy" src="../assets/figures/chapter-03/fig-3-7.png"/><figcaption>图 3.7：运算放大器及其两个示意图。图 a 为集成电路芯片上的放大器引脚连接。图 b 为包含全部连接的示意图。图 c 只显示信号连接。</figcaption></figure>
+<p>我们假设增益 \(k\) 很大，范围为 \(10^6\) 到 \(10^8\)，并且电压 \(v_{\min}\) 和 \(v_{\max}\) 满足</p>
+<div class="math-block">\[
+e_-\le v_{\min}&lt;v_{\max}\le e_+,
+\]</div>
+<p>因此它们处于供电电压范围内。更准确的模型可通过用图 3.8 所示的光滑函数替代饱和函数获得。对小输入信号，放大器特性 (3.8) 是线性的：</p>
+<div class="math-block">\[
+v_{\mathrm{out}}=k(v_+-v_-)=:-kv.
+\tag{3.10}
+\]</div>
+<p>由于开环增益 \(k\) 很大，系统保持线性的输入信号范围非常小。</p>
+<figure class="figure-block"><img alt="图 3.8" loading="lazy" src="../assets/figures/chapter-03/fig-3-8.png"/><figcaption>图 3.8：运算放大器输入输出特性。差分输入为 \(v_+-v_-\)。输出电压在 0 附近很小的范围内是输入的线性函数，并在 \(v_{\min}\) 与 \(v_{\max}\) 处饱和。在线性区域中，运放具有高增益。</figcaption></figure>
+<p>把基本运算放大器置于反馈中，可以得到一个简单放大器，如图 3.9a 所示。为在线性范围内建模反馈放大器，我们假设电流 \(i_0=i_-+i_+\) 为零，且放大器增益非常大，使电压 \(v=v_- - v_+\) 也为零。由欧姆定律可知，电阻 \(R_1\) 与 \(R_2\) 上的电流满足</p>
+<div class="math-block">\[
+\frac{v_1}{R_1}=-\frac{v_2}{R_2},
+\]</div>
+<p>因此放大器的闭环增益为</p>
+<div class="math-block">\[
+\frac{v_2}{v_1}=-k_{\mathrm{cl}},\qquad
+k_{\mathrm{cl}}=\frac{R_2}{R_1}.
+\tag{3.11}
+\]</div>
+<figure class="figure-block"><img alt="图 3.9" loading="lazy" src="../assets/figures/chapter-03/fig-3-9.png"/><figcaption>图 3.9：使用运放的稳定放大器。电路 a 在运算放大器周围使用负反馈，对应框图为 b。电阻 \(R_1\) 与 \(R_2\) 决定放大器增益。</figcaption></figure>
+<p>更准确的模型仍忽略电流 \(i_0\)，但假设电压 \(v\) 很小但不可忽略。电流平衡为</p>
+<div class="math-block">\[
+\frac{v_1-v}{R_1}=\frac{v-v_2}{R_2}.
+\tag{3.12}
+\]</div>
+<p>假设放大器工作在线性范围内，并使用式 (3.10)，闭环系统增益变为</p>
+<div class="math-block">\[
+k_{\mathrm{cl}}=-\frac{v_2}{v_1}
+=\frac{R_2}{R_1}\frac{kR_1}{R_1+R_2+kR_1}.
+\tag{3.13}
+\]</div>
+<p>如果运算放大器开环增益 \(k\) 很大，则闭环增益 \(k_{\mathrm{cl}}\) 与式 (3.11) 给出的简单模型相同。注意，闭环增益只依赖无源元件，而 \(k\) 的变化对闭环增益只有很小影响。例如，当 \(k=10^6\)、\(R_2/R_1=100\) 时，\(k\) 变化 100% 只会使闭环增益变化 0.01%。灵敏度的大幅降低很好地说明了反馈如何用不确定部件构造精确系统。在这个例子中，反馈用高增益和低鲁棒性换取低增益和高鲁棒性。式 (3.13) 正是 Black 发明反馈放大器时受到启发的公式 <sup class="citation">[<a href="bibliography.html#ref-35">35</a>]</sup>，见第 12 章开头引文。</p>
+<p>为图 3.9a 中的反馈放大器建立框图很有启发性。为此，我们把纯放大器表示为一个方框，其输入为 \(v\)，输出为 \(v_2\)。为了完成框图，必须描述 \(v\) 如何依赖 \(v_1\) 和 \(v_2\)。由式 (3.12) 解出 \(v\)，得到</p>
+<div class="math-block">\[
+v=\frac{R_2}{R_1+R_2}v_1+\frac{R_1}{R_1+R_2}v_2
+=\frac{R_1}{R_1+R_2}
+\left(\frac{R_2}{R_1}v_1+v_2\right),
+\]</div>
+<p>于是得到图 3.9b 所示框图。图中清楚显示系统具有反馈，并且从 \(v_2\) 到 \(v\) 的增益为 \(R_1/(R_1+R_2)\)，这个增益也可以直接从图 3.9a 的电路图读出。如果回路稳定且放大器增益很大，则误差 \(e\) 很小，我们得到 \(v_2=-(R_2/R_1)v_1\)。注意，电阻 \(R_1\) 在框图中的两个方框中都出现。电路中经常出现这种情况，这也是框图并不总是适合某些物理建模类型的原因之一。</p>
+<p>式 (3.10) 给出的放大器简单模型能提供定性洞见，但它忽略了放大器本身是动态系统这一事实。更现实的模型为</p>
+<div class="math-block">\[
+\frac{dv_{\mathrm{out}}}{dt}=-av_{\mathrm{out}}-bv.
+\tag{3.14}
+\]</div>
+<p>参数 \(b\) 具有频率量纲，称为放大器的增益带宽积。是否使用更复杂模型，取决于要回答的问题以及所需不确定性柠檬的大小。模型 (3.14) 对很高或很低频率仍然无效，因为低频处漂移会造成偏差，而接近 \(b\) 的频率处会出现额外动态。这个模型也不适用于大信号；上限由电源电压给出，通常为 5 到 20 V；也不适用于非常低的信号，因为存在电噪声。如果需要，可以加入这些效应，但会增加分析复杂性。</p>
+<p>运算放大器用途非常广泛，把它与电阻和电容组合起来，可以构造许多不同系统。事实上，任何线性系统都可以通过运算放大器、电阻和电容的组合实现。习题 3.5 展示如何实现二阶振荡器，图 3.10 显示一个模拟比例积分控制器的电路图。为了建立该电路的简单模型，我们假设电流 \(i_0\) 为零，并且开环增益 \(k\) 足够大，使输入电压 \(v\) 可忽略。通过电容的电流为 \(i=C\,dv_c/dt\)，其中 \(v_c\) 是电容两端电压。由于同一电流流经电阻 \(R_1\)，有</p>
+<div class="math-block">\[
+i=\frac{v_1}{R_1}=C\frac{dv_c}{dt},
+\]</div>
+<p>这意味着</p>
+<div class="math-block">\[
+v_c(t)=\frac{1}{C}\int i(t)\,dt
+=\frac{1}{R_1C}\int_0^t v_1(\tau)\,d\tau.
+\]</div>
+<p>因此输出电压为</p>
+<div class="math-block">\[
+v_2(t)=-R_2i-v_c
+=-\frac{R_2}{R_1}v_1(t)
+-\frac{1}{R_1C}\int_0^t v_1(\tau)\,d\tau,
+\]</div>
+<p>这正是 PI 控制器的输入输出关系。</p>
+<p>运算放大器的发展由 Philbrick 开创 <sup class="citation">[<a href="bibliography.html#ref-139">139</a>, <a href="bibliography.html#ref-165">165</a>]</sup>，许多教材介绍了它的使用，例如 <sup class="citation">[<a href="bibliography.html#ref-53">53</a>]</sup>。供应商也提供了很好的资料 <sup class="citation">[<a href="bibliography.html#ref-112">112</a>, <a href="bibliography.html#ref-145">145</a>]</sup>。</p>
+<h2 id="3.4-计算系统与网络">3.4 计算系统与网络</h2>
+<p>把反馈应用于计算系统，遵循的原则与控制物理系统相同，不过可用的测量和控制输入有所不同。测量，也就是传感器，通常与计算系统或网络中的资源利用有关，可以包括处理器负载、内存使用量、网络带宽等量。控制变量，也就是执行器，通常涉及设定进程可用资源的限制。这可以通过控制进程能够消耗的内存量、磁盘空间或时间来实现，也可以通过开启或关闭处理、延迟资源可用性，或者拒绝进入服务器进程的请求来实现。联网计算系统的过程建模也很有挑战性，在无法得到第一性原理模型时，常使用基于测量的经验模型。</p>
+<h3 id="web-服务器控制">Web 服务器控制</h3>
+<p>Web 服务器响应来自互联网的请求，并以网页形式提供信息。现代 Web 服务器会启动多个进程来响应请求，每个进程被分配给一个来源，直到在预定义时间内不再收到该来源的请求。空闲进程会成为进程池的一部分，可用于响应新请求。为了对 Web 请求提供快速响应，Web 服务器进程不能使服务器计算能力过载，也不能耗尽内存。由于服务器上可能还运行其他进程，可用处理能力和内存是不确定的，反馈可用于在存在这种不确定性时提供良好性能。</p>
+<figure class="figure-block"><img alt="图 3.11" loading="lazy" src="../assets/figures/chapter-03/fig-3-11.png"/><figcaption>图 3.11：Web 服务器的反馈控制。连接请求到达输入队列，并被发送给服务器进程。有限状态机跟踪单个服务器进程的状态并响应请求。控制算法可以通过控制影响服务器行为的参数来改变服务器运行，例如同一时刻可服务的最大请求数 MaxClients，或连接在被丢弃前可保持空闲的时间 KeepAlive。</figcaption></figure>
+<p>图 3.11 说明了如何用反馈调节 Apache Web 服务器的运行。Web 服务器把传入连接请求放入队列，然后启动子进程来处理每个已接受连接的请求。这个子进程随着给定连接的请求到来而作出响应，在 Busy 状态和 Wait 状态之间切换。请求之间保持子进程活动称为连接的持久性，这可以显著降低同一站点多项信息请求的延迟。如果在由 KeepAlive 参数控制的足够长时间内未收到请求，连接会被丢弃，子进程进入 Idle 状态，随后可被分配给另一个连接。最多会同时服务 MaxClients 个请求，其余请求保留在传入请求队列中。</p>
+<p>控制服务器的参数体现了性能和资源使用之间的折中。性能指请求多快得到响应，资源使用指服务器使用多少处理能力和内存。增大 MaxClients 参数，使连接请求可以更快离开队列，但也增加所需处理能力和内存使用。增大 KeepAlive 超时，意味着单个连接可以保持更长空闲时间，这会降低机器处理负载，但增加队列大小，并因而增加用户发起连接所需时间。繁忙服务器的成功运行需要适当选择这些参数，而这种选择常常基于试错。</p>
+<p>为了更详细地建模这个系统动态，我们建立一个离散时间模型，其状态为平均处理器负载 \(x_{\mathrm{cpu}}\) 和内存使用百分比 \(x_{\mathrm{mem}}\)。系统输入取为最大客户端数 \(u_{\mathrm{mc}}\) 和 keep-alive 时间 \(u_{\mathrm{ka}}\)。如果假设平衡点附近有线性模型，则动态可写为</p>
+<div class="math-block">\[
+\begin{bmatrix}
+x_{\mathrm{cpu}}[k+1]\\
+x_{\mathrm{mem}}[k+1]
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_{11}&amp;A_{12}\\
+A_{21}&amp;A_{22}
+\end{bmatrix}
+\begin{bmatrix}
+x_{\mathrm{cpu}}[k]\\
+x_{\mathrm{mem}}[k]
+\end{bmatrix}
++
+\begin{bmatrix}
+B_{11}&amp;B_{12}\\
+B_{21}&amp;B_{22}
+\end{bmatrix}
+\begin{bmatrix}
+u_{\mathrm{ka}}[k]\\
+u_{\mathrm{mc}}[k]
+\end{bmatrix},
+\tag{3.15}
+\]</div>
+<p>其中 \(A\) 和 \(B\) 矩阵的系数可由经验测量或对 Web 服务器处理与内存使用的详细建模确定。Diao 等人 <sup class="citation">[<a href="bibliography.html#ref-59">59</a>, <a href="bibliography.html#ref-97">97</a>]</sup> 使用系统辨识得到线性化动态：</p>
+<div class="math-block">\[
+A=
+\begin{bmatrix}
+0.54&amp;-0.11\\
+-0.026&amp;0.63
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+-85&amp;4.4\\
+-2.5&amp;2.8
+\end{bmatrix}\times10^{-4},
+\]</div>
+<p>系统在线性化时使用的平衡点为</p>
+<div class="math-block">\[
+x_{\mathrm{cpu}}=0.58,\qquad u_{\mathrm{ka}}=11\ \text{s},\qquad
+x_{\mathrm{mem}}=0.55,\qquad u_{\mathrm{mc}}=600.
+\]</div>
+<p>这个模型显示了前面描述的基本特征。先看 \(B\) 矩阵，增大 KeepAlive 超时，也就是 \(B\) 矩阵第一列，会降低处理器使用和内存使用，因为连接更具持久性，服务器花更多时间等待连接关闭，而不是接收新的活动连接。MaxClients 连接则会增加处理和内存需求。注意，对处理器负载影响最大的因素是 KeepAlive 超时。\(A\) 矩阵告诉我们，在平衡点附近状态空间区域内，处理器和内存使用如何演化。对角项描述单个资源在瞬态增加或减少之后如何回到平衡。非对角项显示两个资源之间存在耦合，因此一个资源变化可能引起另一个资源随后变化。</p>
+<p>虽然这个模型很简单，后面的例子会看到，它可用于实时修改控制服务器的参数，并对机器负载中的不确定性提供鲁棒性。类似机制也用于其他类型服务器。记住模型假设及其在判断模型何时有效时的作用很重要。特别是，由于我们选择使用给定采样时间上的平均量，该模型无法准确表示高频现象。</p>
+<h3 id="拥塞控制">拥塞控制</h3>
+<p>互联网的创建，是为了获得一个大型、高度分散、高效且可扩展的通信系统。系统由大量互连网关组成。消息被分成若干数据包，它们通过网络中的不同路径传输，并在接收端重新组合以恢复消息。收到数据包时，接收方会向发送方发回确认消息 ack。系统运行由一种简单但强大的分散控制结构管理，并且该结构随时间演化。</p>
+<figure class="figure-block"><img alt="图 3.12" loading="lazy" src="../assets/figures/chapter-03/fig-3-12.png"/><figcaption>图 3.12：互联网拥塞控制。图 a 中，源计算机向路由器发送信息，路由器再把信息转发给其他路由器，最终连接到接收计算机。收到数据包后，会通过路由器发回确认数据包，图中未显示。路由器缓冲来自源的信息，并通过输出链路发送数据。图 b 显示 \(N\) 台相同计算机通过一个丢包概率为 \(\rho\) 的路由器发送数据包时的平衡缓冲区大小 \(b_e\)。</figcaption></figure>
+<p>系统有两种称为协议的控制机制：传输控制协议 TCP 用于端到端网络通信，互联网协议 IP 用于路由数据包，以及主机到网关或网关到网关通信。当前协议是在 20 世纪 80 年代中期一些严重拥塞崩溃之后演化出来的，当时吞吐量会意外下降 1000 倍 <sup class="citation">[<a href="bibliography.html#ref-108">108</a>]</sup>。TCP 中的控制机制基于守恒从发送方到接收方再回到发送方这一回路中的数据包数量。当没有拥塞时，发送速率指数式增加；当发生拥塞时，发送速率下降到较低水平。</p>
+<p>为了推导拥塞控制的整体模型，我们分别建模系统的三个元素：单个源，也就是计算机，发送数据包的速率；链路，也就是路由器中队列的动态；以及队列的准入控制机制。图 3.12a 是系统框图。</p>
+<p>互联网上当前源控制机制是一种称为 TCP/Reno 的协议 <sup class="citation">[<a href="bibliography.html#ref-137">137</a>]</sup>。该协议向接收方发送数据包，并等待接收方发回确认，表示数据包已经到达。如果在某个超时时间内没有确认，该数据包会被重新发送。为了避免发送下一个数据包前必须等待确认，Reno 会围绕最新已确认的数据包，在固定窗口内发送多个数据包。如果窗口长度选择得当，窗口开头的数据包会在源发送窗口末端的数据包之前获得确认，使计算机能够以高速率连续发送数据包流。</p>
+<p>为了确定使用多大窗口，TCP/Reno 使用一个反馈机制。粗略地说，每当一个数据包被确认，窗口大小增加 1；当数据包丢失时，窗口大小减半。这个机制允许窗口大小动态调整，使每台计算机在数据包能够送达时表现得很贪心，而在发生拥塞时迅速退让。</p>
+<p>可以通过描述窗口大小动态来建立源行为模型。假设有 \(N\) 台计算机，令 \(w_i\) 为第 \(i\) 台计算机的当前窗口大小，以数据包数量计。令 \(q_i\) 表示一个数据包在源与接收方之间某处被丢弃的端到端概率。窗口大小动态可由微分方程建模为</p>
+<div class="math-block">\[
+\frac{dw_i}{dt}
+=(1-q_i)\frac{r_i(t-\tau_i)}{w_i}
++q_i\left(-\frac{w_i}{2}r_i(t-\tau_i)\right),
+\qquad
+r_i=\frac{w_i}{\tau_i},
+\tag{3.16}
+\]</div>
+<p>其中 \(\tau_i\) 是数据包到达目的地并使确认发回的端到端传输时间，\(r_i\) 是数据包从已接收列表中清除的速率。动态中的第一项表示收到数据包时窗口大小增加，第二项表示数据包丢失时窗口大小减小。注意，\(r_i\) 在时刻 \(t-\tau_i\) 处取值，表示接收更多确认所需的时间。</p>
+<p>链路动态由路由器队列动态和队列准入控制机制共同控制。假设网络中有 \(L\) 条链路，并用 \(l\) 标记单条链路。我们根据路由器缓冲区中当前数据包数量 \(b_l\) 建模队列，并假设路由器最多可包含 \(b_{l,\max}\) 个数据包，且以速率 \(c_l\) 传输数据包，该速率等于链路容量。于是缓冲区动态可写为</p>
+<div class="math-block">\[
+\frac{db_l}{dt}=s_l-c_l,\qquad
+s_l=\sum_{\{i:\,l\in L_i\}}r_i(t-\tau^f_{li}),
+\tag{3.17}
+\]</div>
+<p>其中 \(L_i\) 是源 \(i\) 所使用的链路集合，\(\tau^f_{li}\) 是源 \(i\) 的数据包到达链路 \(l\) 所需时间，\(s_l\) 是数据包到达链路 \(l\) 的总速率。</p>
+<p>准入控制机制决定路由器是否接受给定数据包。由于模型基于网络中的平均量而非单个数据包，一个简单模型是假设数据包被丢弃的概率取决于缓冲区有多满：\(p_l=m_l(b_l,b_{\max})\)。为简单起见，暂时假设 \(p_l=\rho_lb_l\)，更详细模型见习题 3.6。给定链路上数据包被丢弃的概率，可用于确定数据包传输中端到端丢失概率：</p>
+<div class="math-block">\[
+q_i=1-\prod_{l\in L_i}(1-p_l)
+\approx \sum_{l\in L_i}p_l(t-\tau^b_{li}),
+\tag{3.18}
+\]</div>
+<p>其中 \(\tau^b_{li}\) 是从链路 \(l\) 到源 \(i\) 的反向延迟。只要单条链路丢包概率较小，这个近似就有效。这里使用反向延迟，因为它表示确认数据包被源接收所需时间。</p>
+<p>式 (3.16)、(3.17) 和 (3.18) 合起来给出拥塞控制动态模型。通过考虑一个特殊情形，可以获得大量洞见：有 \(N\) 个相同源和一条链路。此外，暂时忽略前向和后向时间延迟，此时动态可化为</p>
+<div class="math-block">\[
+\frac{dw_i}{dt}
+=\frac{1}{\tau}-\rho c\frac{2+w_i^2}{2},
+\qquad
+\frac{db}{dt}=\sum_{i=1}^{N}\frac{w_i}{\tau}-c,
+\qquad
+\tau=\frac{b}{c},
+\tag{3.19}
+\]</div>
+<p>其中 \(w_i\in\mathbb{R}, i=1,\ldots,N\)，是数据源窗口大小，\(b\in\mathbb{R}\) 是路由器当前缓冲区大小，\(\rho\) 控制数据包被丢弃的速率，\(c\) 是连接路由器和计算机的链路容量。变量 \(\tau\) 表示根据缓冲区大小和链路容量确定的、路由器处理一个数据包所需时间。把 \(\tau\) 代入方程，可把状态空间动态写成</p>
+<div class="math-block">\[
+\frac{dw_i}{dt}
+=\frac{c}{b}-\rho c\left(1+\frac{w_i^2}{2}\right),
+\qquad
+\frac{db}{dt}
+=\sum_{i=1}^{N}\frac{cw_i}{b}-c.
+\tag{3.20}
+\]</div>
+<p>更复杂的模型可见 <sup class="citation">[<a href="bibliography.html#ref-101">101</a>, <a href="bibliography.html#ref-137">137</a>]</sup>。</p>
+<p>通过令 \(\dot w_i=\dot b=0\)，可以找到系统标称工作点：</p>
+<div class="math-block">\[
+0=\frac{c}{b}-\rho c\left(1+\frac{w_i^2}{2}\right),
+\qquad
+0=\sum_{i=1}^{N}\frac{cw_i}{b}-c.
+\]</div>
+<p>利用所有源动态相同这一事实，可知所有 \(w_i\) 都应相同，并且可以证明存在唯一平衡满足</p>
+<div class="math-block">\[
+w_{i,e}=\frac{b_e}{N}=\frac{c\tau_e}{N},
+\qquad
+\frac{1}{2\rho^2N^2}(\rho b_e)^3+(\rho b_e)-1=0.
+\tag{3.21}
+\]</div>
+<p>第二个方程的解有些繁琐，但很容易数值确定。图 3.12b 显示它的解如何随 \(1/(2\rho^2N^2)\) 变化。还注意到，在平衡时有如下额外等式：</p>
+<div class="math-block">\[
+\tau_e=\frac{b_e}{c}=\frac{Nw_e}{c},
+\qquad
+q_e=Np_e=N\rho b_e,
+\qquad
+r_e=\frac{w_e}{\tau_e}.
+\tag{3.22}
+\]</div>
+<p>图 3.13 显示 60 个源通过一条链路通信的仿真，其中 20 个源在 \(t=500\) ms 时退出，其余源增加速率，也就是窗口大小，来补偿。注意，缓冲区大小和窗口大小会自动调节以匹配链路容量。</p>
+<figure class="figure-block"><img alt="图 3.13" loading="lazy" src="../assets/figures/chapter-03/fig-3-13.png"/><figcaption>图 3.13：\(N\) 个相同源通过单条链路进行互联网拥塞控制。左图中，多个源试图通过路由器跨一条链路通信。接收方发送的 ack 数据包确认消息已收到；否则消息数据包会被重发，并且源端发送速率会降低。右侧仿真为 60 个源从随机速率开始，其中 20 个源在 \(t=500\) ms 时退出。缓冲区大小显示在上方，6 个源的单独源速率显示在下方。</figcaption></figure>
+<p>Tannenbaum 的教材 <sup class="citation">[<a href="bibliography.html#ref-189">189</a>]</sup> 对计算机网络作了全面处理。互联网设计者之一 Van Jacobson 在 <sup class="citation">[<a href="bibliography.html#ref-108">108</a>]</sup> 中很好地介绍了互联网控制原则背后的思想。F. Kelly <sup class="citation">[<a href="bibliography.html#ref-120">120</a>]</sup> 给出了系统分析方面的早期工作。Hellerstein 等人的书 <sup class="citation">[<a href="bibliography.html#ref-97">97</a>]</sup> 给出了许多在计算机系统中使用反馈的例子。</p>
+<h2 id="3.5-原子力显微镜">3.5 原子力显微镜</h2>
+<p>1986 年诺贝尔物理学奖由 格尔德·宾尼希和海因里希·罗雷尔 共同获得，以表彰他们设计扫描隧道显微镜。这种仪器的思想，是把原子级尖锐的探针尖端靠近导电表面，使隧穿发生。通过让探针尖端横向扫过样品，并测量隧穿电流如何随探针位置变化，可以得到图像。这项发明推动了一系列仪器的发展，使人们能够在纳米尺度上观察表面结构，其中包括原子力显微镜 AFM。AFM 使用悬臂梁上的尖端探测样品。AFM 可以在两种模式下运行。在轻敲模式中，悬臂梁振动，振动幅值由反馈控制。在接触模式中，悬臂梁与样品接触，其弯曲由反馈控制。两种情况下，控制都通过压电元件执行，压电元件控制悬臂梁基座或样品的竖直位置。控制系统直接影响图像质量和扫描速率。</p>
+<figure class="figure-block"><img alt="图 3.14" loading="lazy" src="../assets/figures/chapter-03/fig-3-14.png"/><figcaption>图 3.14：原子力显微镜。图 a 为原子力显微镜示意图，包括一个压电驱动器，它使样品在 AFM 探针下扫描。激光从悬臂梁反射出来，并通过反馈控制器用于测量探针偏转。图 b 为 DNA 链的 AFM 图像。图像由 Veeco Instruments 提供。</figcaption></figure>
+<p>图 3.14a 给出了原子力显微镜的示意图。一个尖端半径约为 10 nm 的微悬臂梁被置于样品附近。尖端可以用压电扫描器进行竖直和水平移动。它通过吸引性的范德瓦尔斯力和排斥性的泡利力贴近样品表面。悬臂梁倾斜取决于表面形貌和悬臂梁基座位置，而基座位置由压电元件控制。倾斜通过光电二极管感知激光束偏转来测量。来自光电二极管的信号被放大并送入控制器，控制器驱动悬臂梁竖直位置放大器。通过控制压电元件，使悬臂梁偏转保持恒定，驱动压电元件竖直偏转的信号就成为悬臂梁尖端与样品原子之间原子力的度量。沿样品扫描悬臂梁即可得到表面图像。其分辨率使人们能够在原子尺度上看到样品结构，如图 3.14b 的 DNA AFM 图像所示。</p>
+<p>AFM 的水平运动通常建模为低阻尼弹簧质量系统。竖直运动更复杂。为了建模系统，我们从图 3.15 所示框图开始。容易访问的信号包括驱动压电元件的功率放大器输入电压 \(u\)、施加到压电元件的电压 \(v\)，以及光电二极管信号放大器输出电压 \(y\)。控制器是由计算机实现的 PI 控制器，计算机通过模数转换器 A/D 和数模转换器 D/A 与系统连接。图中也显示了悬臂梁偏转 \(\phi\)。偏转的期望参考值是计算机的输入。</p>
+<figure class="figure-block"><img alt="图 3.15" loading="lazy" src="../assets/figures/chapter-03/fig-3-15.png"/><figcaption>图 3.15：接触模式原子力显微镜中悬臂梁竖直定位系统框图。控制系统试图使悬臂梁偏转等于其参考值。悬臂梁偏转被测量、放大并转换为数字信号，然后与参考值比较。计算机产生校正信号，该信号被转换为模拟形式、放大，并送入压电元件。</figcaption></figure>
+<p>不同配置会有不同动态。这里讨论文献 <sup class="citation">[<a href="bibliography.html#ref-176">176</a>]</sup> 中的一个高性能系统，其中悬臂梁基座用压电堆进行竖直定位。我们用一个简单实验开始建模。图 3.16a 显示扫描器从功率放大器输入电压 \(u\) 到光电二极管信号放大器输出电压 \(y\) 的阶跃响应。这个实验捕捉了图 3.15 框图中从 \(u\) 到 \(y\) 的方框链动态。图 3.16a 显示，系统响应很快，但有一个阻尼很差的振荡模态，周期约为 35 微秒。建模的一个主要任务，是理解振荡行为的来源。为此，我们需要更详细地考察系统。</p>
+<figure class="figure-block"><img alt="图 3.16" loading="lazy" src="../assets/figures/chapter-03/fig-3-16.png"/><figcaption>图 3.16：原子力显微镜建模。图 a 为测得的阶跃响应。最上方曲线显示施加到驱动放大器的电压 \(u\)，50 mV/div；中间曲线为功率放大器输出 \(V_p\)，500 mV/div；底部曲线为信号放大器输出 \(y\)，500 mV/div。时间尺度为 25 微秒/div。数据由 Georg Schitter 提供。图 b 为竖直定位器和压电晶体的简单机械模型。</figcaption></figure>
+<p>夹紧悬臂梁的固有频率通常为几百千赫兹，远高于观察到的约 30 kHz 振荡。作为一阶近似，我们把它建模为静态系统。由于偏转很小，可以假设悬臂梁弯曲 \(\phi\) 与探针处悬臂梁尖端和压电扫描器之间的高度差成正比。更准确的模型可以把悬臂梁建模为第 2 章讨论过的弹簧质量系统。</p>
+<p>图 3.16a 还显示，功率放大器响应很快。光电二极管和信号放大器也具有快速响应，因此可建模为静态系统。剩下的方框是带悬挂的压电系统。图 3.16b 显示扫描器竖直运动的示意机械表示。我们把系统建模为由理想压电元件隔开的两个质量。质量 \(m_1\) 是压电系统的一半，质量 \(m_2\) 是压电系统的另一半加支撑结构质量。</p>
+<p>一个简单模型假设压电晶体在两个质量之间产生力 \(F\)，并且弹簧中有阻尼 \(c\)。令两个质量中心的位置为 \(z_1\) 和 \(z_2\)。动量平衡给出系统模型：</p>
+<div class="math-block">\[
+m_1\frac{d^2z_1}{dt^2}=F,\qquad
+m_2\frac{d^2z_2}{dt^2}=-c_2\frac{dz_2}{dt}-k_2z_2-F.
+\]</div>
+<p>令压电元件伸长 \(l=z_1-z_2\) 为控制变量，悬臂梁基座高度 \(z_1\) 为输出。消去 \(F\)，并用 \(z_1-l\) 替换 \(z_2\)，得到模型</p>
+<div class="math-block">\[
+(m_1+m_2)\frac{d^2z_1}{dt^2}
++c_2\frac{dz_1}{dt}+k_2z_1
+=m_2\frac{d^2l}{dt^2}+c_2\frac{dl}{dt}+k_2l.
+\tag{3.23}
+\]</div>
+<p>总结来说，系统的简单模型可通过用式 (3.23) 建模压电元件，并把所有其他方框建模为静态模型得到。引入线性方程 \(l=k_3u\) 和 \(y=k_4z_1\)，即可得到从控制信号 \(u\) 到输出 \(y\) 的完整模型。更准确的模型可以加入悬臂梁和功率放大器的动态。与前面例子一样，图 2.15b 中的不确定性柠檬概念为描述不确定性提供框架：模型在最高已建模模态频率以下，以及线性化刚度模型适用的运动范围内是准确的。</p>
+<p>图 3.16a 的实验结果可以定性解释如下。当电压施加到压电元件时，它伸长 \(l_0\)，质量 \(m_1\) 立即向上运动，质量 \(m_2\) 立即向下运动。系统随后经过一个阻尼很差的振荡而稳定下来。</p>
+<p>为竖直运动设计控制系统，使其响应快速且振荡很小，是非常理想的。仪器设计者有几种选择：接受振荡并采用较慢响应时间；设计能够阻尼振荡的控制系统；或者重新设计机械结构，使共振频率更高。后两种方案能带来更快响应和更快成像。</p>
+<p>由于系统动态行为会随样品性质而改变，反馈回路需要整定。在简单系统中，目前通常通过手动调节 PI 控制器参数来完成。通过引入自动整定和自适应，可以让 AFM 系统更易使用，这里有很有趣的可能性。</p>
+<p>Sarid 的书 <sup class="citation">[<a href="bibliography.html#ref-173">173</a>]</sup> 对原子力显微镜作了广泛介绍。表面附近原子的相互作用是固体物理的基本内容，见 Kittel <sup class="citation">[<a href="bibliography.html#ref-125">125</a>]</sup>。本节讨论的模型基于 Schitter <sup class="citation">[<a href="bibliography.html#ref-175">175</a>]</sup>。</p>
+<h2 id="3.6-药物给药">3.6 药物给药</h2>
+<p>每天三次，每次两片，是我们都熟悉的建议。这个建议背后，是一个开环控制问题的解。关键问题是，确保身体某一部位的药物浓度足够高，从而产生效果，但又不能高到引起不希望的副作用。控制动作被量化为服两片，并以每 8 小时一次采样。处方基于经验表中的简单模型，剂量则基于患者年龄和体重。</p>
+<figure class="figure-block"><img alt="图 3.17" loading="lazy" src="../assets/figures/chapter-03/fig-3-17.png"/><figcaption>图 3.17：为了描述药物分布而把身体分隔成若干隔室所用的抽象，基于 Teorell <sup class="citation">[<a href="bibliography.html#ref-190">190</a>]</sup>。身体被抽象为若干完全混合的隔室，复杂运输过程通过假设流量与隔室之间浓度差成正比来近似。常数 \(k_i\) 参数化不同隔室之间的流动速率。</figcaption></figure>
+<p>药物给药是一个控制问题。要解决它，必须理解药物给入后如何在体内扩散。这个主题称为药代动力学，如今已经成为独立学科，所用模型称为隔室模型。它们可追溯到 20 世纪 20 年代，当时 Widmark 建模了酒精在体内的传播 <sup class="citation">[<a href="bibliography.html#ref-199">199</a>]</sup>。隔室模型如今对所有人体用药的筛选都很重要。图 3.17 的示意图说明了隔室模型的思想。身体被视为若干隔室，例如血浆、肾脏、肝脏和组织，它们由膜分隔。假设每个隔室内完全混合，因此药物浓度在各自隔室中恒定。复杂运输过程通过假设隔室之间流率与浓度差成正比来近似。</p>
+<p>为了描述药物效果，必须知道它的浓度以及它如何影响身体。浓度 \(c\) 与效果 \(e\) 之间的关系通常是非线性的。一个简单模型为</p>
+<div class="math-block">\[
+e=\frac{c}{c_0+c}e_{\max}.
+\tag{3.24}
+\]</div>
+<p>低浓度时效果近似线性，高浓度时效果饱和。该关系也可以是动态的，此时称为药效动力学。</p>
+<h3 id="隔室模型">隔室模型</h3>
+<p>药物给药的最简单动态模型，假设药物给入后均匀分布在单个隔室中，并且药物以与浓度成正比的速率被移除。隔室表现得像完全混合的搅拌罐。令 \(c\) 为浓度，\(V\) 为体积，\(q\) 为流出速率。把系统描述转换成微分方程，得到模型</p>
+<div class="math-block">\[
+V\frac{dc}{dt}=-qc,\qquad c\ge0.
+\tag{3.25}
+\]</div>
+<p>这个方程的解为 \(c(t)=c_0e^{-qt/V}=c_0e^{-kt}\)，说明注射之后浓度按时间常数 \(T=V/q\) 指数衰减。输入在模型 (3.25) 中隐式地作为初始条件引入。更一般地，输入如何进入模型取决于给药方式。例如，输入可以表示为药物注入隔室的质量流。被溶解的药片也可以解释为质量流率意义下的输入。</p>
+<p>模型 (3.25) 称为单隔室模型或单池模型。参数 \(q/V\) 称为消除速率常数。这个简单模型常用于建模血浆中的浓度。通过在若干时刻测量浓度，可以外推得到初始浓度。如果已知注入物质总量，则可由 \(V=m/c_0\) 确定体积 \(V\)。这个体积称为表观分布容积。如果血浆中的浓度低于身体其他部分中的浓度，该体积会大于真实体积。模型 (3.25) 非常简单，参数存在很大的个体差异。参数 \(V\) 和 \(q\) 常通过除以人的体重来归一化。阿司匹林的典型参数为 \(V=0.2\) L/kg，\(q=0.01\) (L/h)/kg。这些数字可与血容量 0.07 L/kg、血浆容量 0.05 L/kg、细胞内液容量 0.4 L/kg，以及流出率 0.0015 L/min/kg 比较。</p>
+<p>简单单隔室模型捕捉了药物分布的大体行为，但它基于许多简化。通过把身体视为由多个隔室组成，可以得到改进模型。图 3.18 显示这类系统的例子，其中隔室用圆表示，流动用箭头表示。</p>
+<figure class="figure-block"><img alt="图 3.18" loading="lazy" src="../assets/figures/chapter-03/fig-3-18.png"/><figcaption>图 3.18：隔室模型示意图。图 a 为一个简单双隔室模型。每个隔室标有其体积，箭头表示化学物质流入、流出和在隔室之间流动。图 b 为一个用于研究甲状腺激素代谢的六隔室系统 <sup class="citation">[<a href="bibliography.html#ref-85">85</a>]</sup>。记号 \(k_{ij}\) 表示从隔室 \(j\) 到隔室 \(i\) 的运输。</figcaption></figure>
+<p>下面用图 3.18a 中的双隔室模型说明建模。假设每个隔室内完全混合，且隔室之间的运输由浓度差驱动。进一步假设浓度为 \(c_0\) 的药物以体积流率 \(u\) 注入隔室 1，且隔室 2 中的浓度为输出。令 \(c_1,c_2\) 为两个隔室中的药物浓度，\(V_1,V_2\) 为隔室体积。隔室的质量平衡为</p>
+<div class="math-block">\[
+V_1\frac{dc_1}{dt}=q(c_2-c_1)-q_0c_1+c_0u,\qquad c_1\ge0,
+\]</div>
+<div class="math-block">\[
+V_2\frac{dc_2}{dt}=q(c_1-c_2),\qquad c_2\ge0,
+\qquad y=c_2.
+\tag{3.26}
+\]</div>
+<p>引入变量 \(k_0=q_0/V_1\)、\(k_1=q/V_1\)、\(k_2=q/V_2\) 和 \(b_0=c_0/V_1\)，并使用矩阵记号，模型可写为</p>
+<div class="math-block">\[
+\frac{dc}{dt}=
+\begin{bmatrix}
+-k_0-k_1&amp;k_1\\
+k_2&amp;-k_2
+\end{bmatrix}c+
+\begin{bmatrix}
+b_0\\0
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+0&amp;1
+\end{bmatrix}c.
+\tag{3.27}
+\]</div>
+<p>把这个模型与图 3.18a 中的图形表示比较，可以发现数学表示 (3.27) 可通过观察直接写出。</p>
+<p>还应强调，式 (3.27) 这类简单隔室模型的有效范围有限。低频限制存在，因为人体会随时间变化；由于隔室模型使用平均浓度，它们无法准确表示快速变化。影响隔室间运输的非线性效应也存在。</p>
+<p>隔室模型广泛用于医学、工程和环境科学。这类系统的一个有趣性质是，浓度和质量等变量总是正的。隔室建模中的一个基本困难，是决定如何把复杂系统划分为隔室。隔室模型也可以是非线性的，下一节对此作出说明。</p>
+<h3 id="胰岛素葡萄糖动态">胰岛素葡萄糖动态</h3>
+<p>人体血糖浓度必须维持在狭窄范围内，约为 0.7 到 1.1 g/L，这是很重要的。葡萄糖浓度受许多因素影响，例如进食、消化和运动。图 3.19a 与 b 显示相关身体部位的示意图。</p>
+<figure class="figure-block"><img alt="图 3.19" loading="lazy" src="../assets/figures/chapter-03/fig-3-19.png"/><figcaption>图 3.19：胰岛素葡萄糖动态。图 a 为参与葡萄糖控制的身体部位草图。图 b 为系统示意图。图 c 为静脉注射葡萄糖后胰岛素和葡萄糖的响应，来自 <sup class="citation">[<a href="bibliography.html#ref-164">164</a>]</sup>。</figcaption></figure>
+<p>调节葡萄糖浓度有一套复杂机制。葡萄糖浓度由胰腺维持，胰腺分泌胰岛素和胰高血糖素。葡萄糖水平低时，胰高血糖素释放到血液中，它作用于肝脏细胞，使其释放葡萄糖。葡萄糖水平高时，胰岛素被分泌，促使肝脏和其他细胞摄取更多葡萄糖，从而降低葡萄糖水平。在青少年糖尿病等疾病中，胰腺无法产生胰岛素，患者必须向体内注射胰岛素以维持适当葡萄糖水平。</p>
+<p>调节葡萄糖和胰岛素的机制很复杂，人们已经观察到时间尺度从秒到小时的动态。已有不同复杂度的模型被发展出来。模型通常通过实验数据检验，在实验中葡萄糖被静脉注射，随后定期测量胰岛素和葡萄糖浓度。</p>
+<p>Bergman 及其合作者发展了一个相对简单的最小模型 <sup class="citation">[<a href="bibliography.html#ref-31">31</a>]</sup>。该模型使用两个隔室，一个表示血液循环中的葡萄糖浓度，另一个表示间质液中的胰岛素浓度。血液循环中的胰岛素被视为输入。葡萄糖对胰岛素的反应可由方程建模为</p>
+<div class="math-block">\[
+\frac{dx_1}{dt}=-(p_1+x_2)x_1+p_1g_e,\qquad
+\frac{dx_2}{dt}=-p_2x_2+p_3(u-i_e),
+\tag{3.28}
+\]</div>
+<p>其中 \(g_e\) 和 \(i_e\) 分别表示葡萄糖与胰岛素的平衡值，\(x_1\) 是葡萄糖浓度，\(x_2\) 与间质胰岛素浓度成正比。注意第一个方程中存在项 \(x_2x_1\)。还要注意，该模型没有捕捉完整反馈回路，因为它没有描述胰腺如何对葡萄糖作出反应。图 3.19c 显示该模型对一个正常人测试数据的拟合，其中葡萄糖在时刻 \(t=0\) 被静脉注射。葡萄糖浓度快速升高，胰腺以快速尖峰状胰岛素注入作出响应。随后，葡萄糖和胰岛素水平逐渐接近平衡值。</p>
+<p>人们已经发展并使用实验数据拟合了式 (3.28) 类型的模型，以及具有多个隔室的更复杂模型。建模中的一个困难是，不同时间和不同患者之间，模型参数存在显著差异。例如，据报道式 (3.28) 中参数 \(p_1\) 在健康个体中可变化一个数量级。这些模型已用于诊断，并用于发展疾病患者的治疗方案。由于缺乏可靠传感器，发展完全自动人工胰腺的尝试一直受到阻碍。</p>
+<p>Widmark 与 Tandberg <sup class="citation">[<a href="bibliography.html#ref-199">199</a>]</sup>、Teorell <sup class="citation">[<a href="bibliography.html#ref-190">190</a>]</sup> 的论文是药代动力学中的经典文献。药代动力学如今已经是一门成熟学科，有许多教材 <sup class="citation">[<a href="bibliography.html#ref-62">62</a>, <a href="bibliography.html#ref-109">109</a>, <a href="bibliography.html#ref-84">84</a>]</sup>。由于医学重要性，药代动力学现在是药物开发的基本组成部分。Riggs 的书 <sup class="citation">[<a href="bibliography.html#ref-168">168</a>]</sup> 是生理系统建模的良好来源，文献 <sup class="citation">[<a href="bibliography.html#ref-119">119</a>]</sup> 给出了更数学化的处理。隔室模型见 <sup class="citation">[<a href="bibliography.html#ref-85">85</a>]</sup>。从实验数据确定速率系数的问题见 <sup class="citation">[<a href="bibliography.html#ref-26">26</a>]</sup> 和 <sup class="citation">[<a href="bibliography.html#ref-85">85</a>]</sup>。胰岛素葡萄糖模型有许多发表文献。最小模型见 <sup class="citation">[<a href="bibliography.html#ref-52">52</a>, <a href="bibliography.html#ref-31">31</a>]</sup>，较新的参考文献包括 <sup class="citation">[<a href="bibliography.html#ref-143">143</a>, <a href="bibliography.html#ref-72">72</a>]</sup>。</p>
+<h2 id="3.7-种群动态">3.7 种群动态</h2>
+<p>种群增长是一个复杂动态过程，涉及一个或多个物种与其环境及更大生态系统之间的相互作用。种群群体动态在许多社会政策和环境政策领域都很有趣，也很重要。历史上有一些例子，人们把新物种引入新栖息地，有时造成灾难性结果。人们也曾试图通过激励或立法控制种群增长。本节描述一些模型，用于理解种群如何随时间和环境变化而演化。</p>
+<h3 id="逻辑斯蒂增长模型">逻辑斯蒂增长模型</h3>
+<p>令 \(x\) 表示时刻 \(t\) 某个物种的种群数量。一个简单模型假设出生率和死亡率都与总种群数量成正比。这给出线性模型</p>
+<div class="math-block">\[
+\frac{dx}{dt}=bx-dx=(b-d)x=rx,\qquad x\ge0,
+\tag{3.29}
+\]</div>
+<p>其中出生率 \(b\) 和死亡率 \(d\) 是参数。如果 \(b&gt;d\)，模型给出指数增长；如果 \(b&lt;d\)，模型给出指数下降。更现实的模型是假设当种群很大时出生率下降。下面对模型 (3.29) 的修改具有这一性质：</p>
+<div class="math-block">\[
+\frac{dx}{dt}=rx\left(1-\frac{x}{k}\right),\qquad x\ge0,
+\tag{3.30}
+\]</div>
+<p>其中 \(k\) 是环境承载能力。模型 (3.30) 称为 逻辑斯蒂增长模型。</p>
+<h3 id="捕食者猎物模型">捕食者猎物模型</h3>
+<p>更复杂的种群动态模型包括竞争种群的影响，其中一个物种可能以另一个物种为食。这种情形称为捕食者猎物问题，例 2.3 已经介绍过。当时我们发展了一个离散时间模型，捕捉了猞猁和野兔种群历史记录中的一些特征。</p>
+<p>本节中，我们用更复杂的微分方程模型替代那里的差分方程模型。令 \(H(t)\) 表示野兔数量，也就是猎物，令 \(L(t)\) 表示猞猁数量，也就是捕食者。系统动态建模为</p>
+<div class="math-block">\[
+\frac{dH}{dt}
+=rH\left(1-\frac{H}{k}\right)-\frac{aHL}{c+H},
+\qquad H\ge0,
+\]</div>
+<div class="math-block">\[
+\frac{dL}{dt}
+=\frac{baHL}{c+H}-dL,
+\qquad L\ge0.
+\tag{3.31}
+\]</div>
+<p>在第一个方程中，\(r\) 表示野兔增长率，\(k\) 表示没有猞猁时野兔的最大种群数量，\(a\) 表示相互作用项，描述野兔如何随猞猁种群减少，\(c\) 控制低野兔种群时的猎物消费率。在第二个方程中，\(b\) 表示猞猁增长系数，\(d\) 表示猞猁死亡率。注意，野兔动态包括一个类似 逻辑斯蒂增长模型 (3.30) 的项。</p>
+<p>我们特别感兴趣的是使种群值保持恒定的取值，称为平衡点。这个系统的平衡点可通过令上述方程右端为零来确定。令 \(H_e\) 和 \(L_e\) 表示平衡状态，由第二个方程得到</p>
+<div class="math-block">\[
+L_e=0\qquad\text{或}\qquad
+H_e^*=\frac{cd}{ab-d}.
+\tag{3.32}
+\]</div>
+<p>把它代入第一个方程，如果 \(L_e=0\)，则有 \(H_e=0\) 或 \(H_e=k\)。对 \(L_e\ne0\)，得到</p>
+<div class="math-block">\[
+L_e^*
+=\frac{rH_e(c+H_e)}{aH_e}
+\left(1-\frac{H_e}{k}\right)
+=\frac{bcr(abk-cd-dk)}{(ab-d)^2k}.
+\tag{3.33}
+\]</div>
+<p>因此有三个可能平衡点 \(x_e=(H_e,L_e)\)：</p>
+<div class="math-block">\[
+x_e=
+\begin{bmatrix}
+0\\0
+\end{bmatrix},
+\qquad
+x_e=
+\begin{bmatrix}
+k\\0
+\end{bmatrix},
+\qquad
+x_e=
+\begin{bmatrix}
+H_e^*\\L_e^*
+\end{bmatrix}.
+\]</div>
+<p>注意，对某些参数值，平衡种群可能为负，这对应不可达到的平衡点。</p>
+<p>图 3.20 显示从一组接近非零平衡值的种群值出发得到的动态仿真。可以看到，对这组参数，仿真预测两个物种的种群数量都会振荡，这让人想起图 2.6 所示的数据。</p>
+<figure class="figure-block"><img alt="图 3.20" loading="lazy" src="../assets/figures/chapter-03/fig-3-20.png"/><figcaption>图 3.20：捕食者猎物系统仿真。左图显示两个种群如何随时间变化。右图显示从不同种群初值出发，两个种群彼此之间的关系。两图中的振荡是极限环的一个例子。仿真所用参数为 \(a=3.2\)、\(b=0.6\)、\(c=50\)、\(d=0.56\)、\(k=125\)、\(r=1.6\)。</figcaption></figure>
+<p>J. D. Murray 两卷本著作的第一卷 <sup class="citation">[<a href="bibliography.html#ref-154">154</a>]</sup> 对种群动态作了广泛介绍。</p>
+<h2 id="习题">习题</h2>
+<p>3.1 巡航控制。考虑第 3.1 节描述的巡航控制例子。构建仿真，重现图 3.3b 中对坡道的响应，并展示汽车质量增加和减少 25% 的影响。重新设计控制器，可以用试错，使系统在遇到坡道起点后 3 s 内回到期望速度的 10% 范围内。</p>
+<p>3.2 自行车动态。证明式 (3.5) 给出的自行车车架动态可近似写成状态空间形式：</p>
+<div class="math-block">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x_1\\x_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0&amp;1\\
+mgh/J&amp;0
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\x_2
+\end{bmatrix}
++
+\begin{bmatrix}
+Dv_0/(bJ)\\
+mv_0^2h/(bJ)
+\end{bmatrix}u,
+\]</div>
+<div class="math-block">\[
+y=
+\begin{bmatrix}
+1&amp;0
+\end{bmatrix}x,
+\tag{3.34}
+\]</div>
+<p>其中输入 \(u\) 是转向角 \(\delta\)，输出 \(y\) 是倾斜角 \(\phi\)。状态 \(x_1\) 和 \(x_2\) 分别表示什么？</p>
+<p>3.3 自行车转向。把式 (3.5) 给出的自行车模型与例 2.8 中的转向运动学模型结合起来，得到一个描述自行车质心路径的模型。</p>
+<p>3.4 运算放大器电路。考虑下图所示的运放电路。证明动态可写成状态空间形式</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+-\frac{1}{R_1C_1}&amp;-\frac{1}{R_aC_1}\\
+-\frac{R_b}{R_aR_2C_2}&amp;-\frac{1}{R_2C_2}
+\end{bmatrix}x+
+\begin{bmatrix}
+\frac{1}{R_1C_1}\\
+0
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+0&amp;1
+\end{bmatrix}x,
+\]</div>
+<p>其中 \(u=v_1\)，\(y=v_3\)。提示：使用 \(v_2\) 和 \(v_3\) 作为状态变量。</p>
+<p>3.5 运算放大器振荡器。下图所示运放电路是一个振荡器的实现。证明动态可写成状态空间形式</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+0&amp;\frac{R_4}{R_1R_3C_1}\\
+-\frac{1}{R_2C_2}&amp;0
+\end{bmatrix}x,
+\]</div>
+<p>其中状态变量表示电容两端电压，\(x_1=v_1\)，\(x_2=v_2\)。</p>
+<p>3.6 使用 RED 的拥塞控制 <sup class="citation">[<a href="bibliography.html#ref-138">138</a>]</sup>。第 3.4 节中提出的互联网拥塞控制模型可以做若干改进。为了确保路由器缓冲区大小保持为正，可以修改缓冲区动态，使其满足</p>
+<div class="math-block">\[
+\frac{db_l}{dt}=
+\begin{cases}
+s_l-c_l,&amp; b_l&gt;0,\\
+\operatorname{sat}_{(0,\infty)}(s_l-c_l),&amp; b_l=0.
+\end{cases}
+\]</div>
+<p>此外，可以根据缓冲区距离极限的接近程度来建模数据包丢弃概率，这种机制称为随机早期检测 RED：</p>
+<div class="math-block">\[
+p_l=m_l(a_l)=
+\begin{cases}
+0,&amp;a_l(t)\le b_l^{\mathrm{lower}},\\
+\rho_lr_i(t-\tau_l^f)\dfrac{a_l(t)-b_l^{\mathrm{lower}}}{b_l^{\mathrm{upper}}-b_l^{\mathrm{lower}}},&amp;
+b_l^{\mathrm{lower}}&lt;a_l(t)&lt;b_l^{\mathrm{upper}},\\
+\rho_lr_i(t-\tau_l^f),&amp;
+b_l^{\mathrm{upper}}\le a_l(t)&lt;2b_l^{\mathrm{upper}},\\
+1,&amp;a_l(t)\ge 2b_l^{\mathrm{upper}},
+\end{cases}
+\]</div>
+<div class="math-block">\[
+\frac{da_l}{dt}=-\alpha_lc_l(a_l-b_l),
+\]</div>
+<p>其中 \(\alpha_l,b_l^{\mathrm{upper}},b_l^{\mathrm{lower}}\) 和 \(p_l^{\mathrm{upper}}\) 是 RED 协议参数。使用上述模型编写系统仿真，并找出一组使系统具有稳定平衡点的参数，以及一组使系统表现出振荡解的参数。应探索如下参数集合：</p>
+<div class="math-block">\[
+N=20,30,\ldots,60,\quad b_l^{\mathrm{lower}}=40\ \text{pkts},\quad \rho_l=0.1,
+\]</div>
+<div class="math-block">\[
+c=8,9,\ldots,15\ \text{pkts/ms},\quad
+b_l^{\mathrm{upper}}=540\ \text{pkts},\quad
+\alpha_l=10^{-4},
+\]</div>
+<div class="math-block">\[
+\tau=55,60,\ldots,100\ \text{ms}.
+\]</div>
+<p>3.7 带压电管的原子力显微镜。下图显示竖直扫描器为带预载压电管的 AFM 示意图。证明动态可写为</p>
+<div class="math-block">\[
+(m_1+m_2)\frac{d^2z_1}{dt^2}
++(c_1+c_2)\frac{dz_1}{dt}
++(k_1+k_2)z_1
+=m_2\frac{d^2l}{dt^2}+c_2\frac{dl}{dt}+k_2l.
+\]</div>
+<p>是否存在使动态特别简单的参数值？</p>
+<p>3.8 药物给药。酒精在体内的代谢可由非线性隔室模型描述：</p>
+<div class="math-block">\[
+V_b\frac{dc_b}{dt}=q(c_l-c_b)+q_{\mathrm{iv}},
+\]</div>
+<div class="math-block">\[
+V_l\frac{dc_l}{dt}
+=q(c_b-c_l)-q_{\max}\frac{c_l}{c_0+c_l}+q_{\mathrm{gi}},
+\]</div>
+<p>其中 \(V_b=48\) L 和 \(V_l=0.6\) L 是身体水分和肝脏水分的表观分布容积，\(c_b,c_l\) 是两个隔室中的酒精浓度，\(q_{\mathrm{iv}},q_{\mathrm{gi}}\) 是静脉给入和胃肠摄入的注入速率，\(q=1.5\) L/min 是总肝血流量，\(q_{\max}=2.75\) mmol/min，\(c_0=0.1\) mmol/L。仿真系统，并计算口服和静脉给入 12 g 与 40 g 酒精时血液中的浓度。</p>
+<p>3.9 种群动态。考虑式 (3.30) 给出的 逻辑斯蒂增长模型。证明最大增长率出现在种群大小为稳态值一半时。</p>
+<p>3.10 渔业管理。商业渔业动态可由如下简单模型描述：</p>
+<div class="math-block">\[
+\frac{dx}{dt}=f(x)-h(x,u),\qquad
+y=bh(x,u)-cu,
+\]</div>
+<p>其中 \(x\) 是总生物量，\(f(x)=rx(1-x/k)\) 是增长率，\(h(x,u)=axu\) 是捕捞率。输出 \(y\) 是收入速率，参数 \(a,b,c\) 是表示鱼价和捕捞成本的常数。证明存在一个稳态生物量为 \(x_e=c/(ab)\) 的平衡。与把生物量调节为常值时的情形作比较，并找出那种情况下的最大可持续收益。</p>
+
+        </article>
+        <div class="pagination"><a href="chapter-02.html" class="page-btn">← 上一章：系统建模</a><a href="chapter-04.html" class="page-btn">下一章：动态行为 →</a></div>
+      </main>
+    </div>
+<button id="backToTop" title="回到顶部" type="button">↑</button>
+<script src="../script.js"></script>
+</body>
+</html>

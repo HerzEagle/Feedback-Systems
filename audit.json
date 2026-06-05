@@ -1,0 +1,2589 @@
+{
+  "audit": {
+    "chapters": [
+      {
+        "chapter": 1,
+        "file": "01-引言.md",
+        "chars": 19702,
+        "lines": 311,
+        "headings": 25,
+        "figures": 17
+      },
+      {
+        "chapter": 2,
+        "file": "02-系统建模.md",
+        "chars": 35040,
+        "lines": 1161,
+        "headings": 35,
+        "figures": 23
+      },
+      {
+        "chapter": 3,
+        "file": "03-例子.md",
+        "chars": 26662,
+        "lines": 828,
+        "headings": 15,
+        "figures": 19
+      },
+      {
+        "chapter": 4,
+        "file": "04-动态行为.md",
+        "chars": 34095,
+        "lines": 1364,
+        "headings": 34,
+        "figures": 20
+      },
+      {
+        "chapter": 5,
+        "file": "05-线性系统.md",
+        "chars": 37007,
+        "lines": 1742,
+        "headings": 31,
+        "figures": 15
+      },
+      {
+        "chapter": 6,
+        "file": "06-状态反馈.md",
+        "chars": 33466,
+        "lines": 1815,
+        "headings": 26,
+        "figures": 14
+      },
+      {
+        "chapter": 7,
+        "file": "07-输出反馈.md",
+        "chars": 26565,
+        "lines": 1460,
+        "headings": 23,
+        "figures": 11
+      },
+      {
+        "chapter": 8,
+        "file": "08-传递函数.md",
+        "chars": 35129,
+        "lines": 1679,
+        "headings": 28,
+        "figures": 13
+      },
+      {
+        "chapter": 9,
+        "file": "09-频域分析.md",
+        "chars": 24436,
+        "lines": 891,
+        "headings": 26,
+        "figures": 17
+      },
+      {
+        "chapter": 10,
+        "file": "10-PID控制.md",
+        "chars": 19984,
+        "lines": 746,
+        "headings": 21,
+        "figures": 13
+      },
+      {
+        "chapter": 11,
+        "file": "11-频域设计.md",
+        "chars": 28379,
+        "lines": 1038,
+        "headings": 28,
+        "figures": 18
+      },
+      {
+        "chapter": 12,
+        "file": "12-鲁棒性能.md",
+        "chars": 28845,
+        "lines": 1229,
+        "headings": 32,
+        "figures": 18
+      }
+    ],
+    "suspicious": [],
+    "math": [],
+    "figures_total": 198,
+    "figures_found": 198,
+    "figures_missing": []
+  },
+  "output": {
+    "html_files": 13,
+    "images": 198,
+    "links": 190,
+    "missing": [],
+    "inline_math_markers": 4306,
+    "display_math_markers": 1329
+  },
+  "build": [
+    {
+      "chapter": 1,
+      "title": "引言",
+      "markdown_chars": 19702,
+      "figures": [
+        {
+          "figure": "1.1",
+          "found": true,
+          "page": 1,
+          "image": "../assets/figures/chapter-01/fig-1-1.png",
+          "crop": [
+            42.67,
+            501.77,
+            392.32,
+            586.61
+          ]
+        },
+        {
+          "figure": "1.2",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-01/fig-1-2.png",
+          "crop": [
+            42.72,
+            42,
+            390.06,
+            207.97
+          ]
+        },
+        {
+          "figure": "1.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-01/fig-1-3.png",
+          "crop": [
+            44.8,
+            48.05,
+            390.13,
+            246.48
+          ]
+        },
+        {
+          "figure": "1.4",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-01/fig-1-4.png",
+          "crop": [
+            31.51,
+            49.93,
+            402.83,
+            217.92
+          ]
+        },
+        {
+          "figure": "1.5",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-01/fig-1-5.png",
+          "crop": [
+            29.04,
+            42.24,
+            402.79,
+            272.5
+          ]
+        },
+        {
+          "figure": "1.6",
+          "found": true,
+          "page": 8,
+          "image": "../assets/figures/chapter-01/fig-1-6.png",
+          "crop": [
+            24,
+            42.16,
+            408.72,
+            205.91
+          ]
+        },
+        {
+          "figure": "1.7",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-01/fig-1-7.png",
+          "crop": [
+            24,
+            42.03,
+            401.5,
+            207.97
+          ]
+        },
+        {
+          "figure": "1.8",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-01/fig-1-8.png",
+          "crop": [
+            45.88,
+            45.53,
+            392.25,
+            135.97
+          ]
+        },
+        {
+          "figure": "1.9",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-01/fig-1-9.png",
+          "crop": [
+            26.88,
+            42.05,
+            405.64,
+            207.97
+          ]
+        },
+        {
+          "figure": "1.10",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-01/fig-1-10.png",
+          "crop": [
+            24,
+            42.23,
+            407.31,
+            152.92
+          ]
+        },
+        {
+          "figure": "1.11",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-01/fig-1-11.png",
+          "crop": [
+            53.91,
+            49.62,
+            375.62,
+            166.97
+          ]
+        },
+        {
+          "figure": "1.12",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-01/fig-1-12.png",
+          "crop": [
+            38.86,
+            42.15,
+            393.56,
+            293.38
+          ]
+        },
+        {
+          "figure": "1.13",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-01/fig-1-13.png",
+          "crop": [
+            25.13,
+            42.46,
+            397.04,
+            146.05
+          ]
+        },
+        {
+          "figure": "1.14",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-01/fig-1-14.png",
+          "crop": [
+            57.35,
+            42.03,
+            372.47,
+            207.97
+          ]
+        },
+        {
+          "figure": "1.15",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-01/fig-1-15.png",
+          "crop": [
+            24,
+            45.22,
+            408.72,
+            179.17
+          ]
+        },
+        {
+          "figure": "1.16",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-01/fig-1-16.png",
+          "crop": [
+            45.15,
+            47.0,
+            387.37,
+            149.52
+          ]
+        },
+        {
+          "figure": "1.17",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-01/fig-1-17.png",
+          "crop": [
+            73.29,
+            42,
+            359.69,
+            173.9
+          ]
+        }
+      ],
+      "html": "chapters/chapter-01.html"
+    },
+    {
+      "chapter": 2,
+      "title": "系统建模",
+      "markdown_chars": 35040,
+      "figures": [
+        {
+          "figure": "2.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-02/fig-2-1.png",
+          "crop": [
+            146.99,
+            48.4,
+            287.34,
+            154.97
+          ]
+        },
+        {
+          "figure": "2.2",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-02/fig-2-2.png",
+          "crop": [
+            56.71,
+            49.29,
+            375.87,
+            190.51
+          ]
+        },
+        {
+          "figure": "2.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-02/fig-2-3.png",
+          "crop": [
+            46.52,
+            42,
+            391.27,
+            207.97
+          ]
+        },
+        {
+          "figure": "2.4",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-02/fig-2-4.png",
+          "crop": [
+            37.84,
+            46.79,
+            389.03,
+            205.46
+          ]
+        },
+        {
+          "figure": "2.5",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-02/fig-2-5.png",
+          "crop": [
+            26.26,
+            42,
+            403.65,
+            210.92
+          ]
+        },
+        {
+          "figure": "2.6",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-02/fig-2-6.png",
+          "crop": [
+            25.42,
+            42.09,
+            405.14,
+            159.61
+          ]
+        },
+        {
+          "figure": "2.7",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-02/fig-2-7.png",
+          "crop": [
+            41.64,
+            49.26,
+            389.29,
+            181.86
+          ]
+        },
+        {
+          "figure": "2.8",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-02/fig-2-8.png",
+          "crop": [
+            100.01,
+            48.4,
+            326.22,
+            154.97
+          ]
+        },
+        {
+          "figure": "2.9",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-02/fig-2-9.png",
+          "crop": [
+            43.55,
+            49.51,
+            387.78,
+            190.51
+          ]
+        },
+        {
+          "figure": "2.10",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-02/fig-2-10.png",
+          "crop": [
+            39.93,
+            50.87,
+            388.75,
+            194.51
+          ]
+        },
+        {
+          "figure": "2.11",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-02/fig-2-11.png",
+          "crop": [
+            24,
+            61.15,
+            408.72,
+            383.76
+          ]
+        },
+        {
+          "figure": "2.12",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-02/fig-2-12.png",
+          "crop": [
+            66.99,
+            452.26,
+            374.65,
+            587.02
+          ]
+        },
+        {
+          "figure": "2.13",
+          "found": true,
+          "page": 20,
+          "image": "../assets/figures/chapter-02/fig-2-13.png",
+          "crop": [
+            28.0,
+            45.93,
+            402.92,
+            210.3
+          ]
+        },
+        {
+          "figure": "2.14",
+          "found": true,
+          "page": 22,
+          "image": "../assets/figures/chapter-02/fig-2-14.png",
+          "crop": [
+            41.72,
+            48.82,
+            386.29,
+            189.85
+          ]
+        },
+        {
+          "figure": "2.15",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-02/fig-2-15.png",
+          "crop": [
+            34.06,
+            54.58,
+            405.04,
+            172.4
+          ]
+        },
+        {
+          "figure": "2.16",
+          "found": true,
+          "page": 26,
+          "image": "../assets/figures/chapter-02/fig-2-16.png",
+          "crop": [
+            56.1,
+            45.55,
+            382.1,
+            178.97
+          ]
+        },
+        {
+          "figure": "2.17",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-02/fig-2-17.png",
+          "crop": [
+            33.92,
+            42,
+            403.36,
+            219.92
+          ]
+        },
+        {
+          "figure": "2.18",
+          "found": true,
+          "page": 28,
+          "image": "../assets/figures/chapter-02/fig-2-18.png",
+          "crop": [
+            113.69,
+            42.45,
+            321.5,
+            137.9
+          ]
+        },
+        {
+          "figure": "2.19",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-02/fig-2-19.png",
+          "crop": [
+            51.9,
+            48.83,
+            385.84,
+            164.7
+          ]
+        },
+        {
+          "figure": "2.20",
+          "found": true,
+          "page": 30,
+          "image": "../assets/figures/chapter-02/fig-2-20.png",
+          "crop": [
+            55.55,
+            42,
+            389.34,
+            170.32
+          ]
+        },
+        {
+          "figure": "2.21",
+          "found": true,
+          "page": 31,
+          "image": "../assets/figures/chapter-02/fig-2-21.png",
+          "crop": [
+            45.48,
+            48.67,
+            379.52,
+            164.83
+          ]
+        },
+        {
+          "figure": "2.22",
+          "found": true,
+          "page": 33,
+          "image": "../assets/figures/chapter-02/fig-2-22.png",
+          "crop": [
+            36.69,
+            42,
+            395.13,
+            164.77
+          ]
+        },
+        {
+          "figure": "2.23",
+          "found": true,
+          "page": 34,
+          "image": "../assets/figures/chapter-02/fig-2-23.png",
+          "crop": [
+            46.92,
+            49.15,
+            378.68,
+            204.92
+          ]
+        }
+      ],
+      "html": "chapters/chapter-02.html"
+    },
+    {
+      "chapter": 3,
+      "title": "例子",
+      "markdown_chars": 26662,
+      "figures": [
+        {
+          "figure": "3.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-03/fig-3-1.png",
+          "crop": [
+            61.93,
+            42.38,
+            374.09,
+            183.17
+          ]
+        },
+        {
+          "figure": "3.2",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-03/fig-3-2.png",
+          "crop": [
+            38.62,
+            48.79,
+            397.39,
+            190.51
+          ]
+        },
+        {
+          "figure": "3.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-03/fig-3-3.png",
+          "crop": [
+            25.16,
+            52.74,
+            393.87,
+            211.45
+          ]
+        },
+        {
+          "figure": "3.4",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-03/fig-3-4.png",
+          "crop": [
+            68.67,
+            42.05,
+            358.65,
+            153.97
+          ]
+        },
+        {
+          "figure": "3.5",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-03/fig-3-5.png",
+          "crop": [
+            40.88,
+            45.43,
+            391.55,
+            220.78
+          ]
+        },
+        {
+          "figure": "3.6",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-03/fig-3-6.png",
+          "crop": [
+            125.85,
+            45.67,
+            306.69,
+            118.91
+          ]
+        },
+        {
+          "figure": "3.7",
+          "found": true,
+          "page": 8,
+          "image": "../assets/figures/chapter-03/fig-3-7.png",
+          "crop": [
+            41.37,
+            47.18,
+            400.54,
+            150.92
+          ]
+        },
+        {
+          "figure": "3.8",
+          "found": true,
+          "page": 8,
+          "image": "../assets/figures/chapter-03/fig-3-8.png",
+          "crop": [
+            99.29,
+            452.78,
+            335.9,
+            593.33
+          ]
+        },
+        {
+          "figure": "3.9",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-03/fig-3-9.png",
+          "crop": [
+            24,
+            42,
+            408.72,
+            149.92
+          ]
+        },
+        {
+          "figure": "3.11",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-03/fig-3-11.png",
+          "crop": [
+            24,
+            42,
+            401.36,
+            200.04
+          ]
+        },
+        {
+          "figure": "3.12",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-03/fig-3-12.png",
+          "crop": [
+            30.91,
+            48.43,
+            391.46,
+            194.8
+          ]
+        },
+        {
+          "figure": "3.13",
+          "found": true,
+          "page": 17,
+          "image": "../assets/figures/chapter-03/fig-3-13.png",
+          "crop": [
+            26.05,
+            58.96,
+            397.18,
+            199.94
+          ]
+        },
+        {
+          "figure": "3.14",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-03/fig-3-14.png",
+          "crop": [
+            26.54,
+            42.54,
+            407.09,
+            191.92
+          ]
+        },
+        {
+          "figure": "3.15",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-03/fig-3-15.png",
+          "crop": [
+            81.93,
+            446.29,
+            350.52,
+            573.59
+          ]
+        },
+        {
+          "figure": "3.16",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-03/fig-3-16.png",
+          "crop": [
+            49.97,
+            42.45,
+            373.6,
+            206.04
+          ]
+        },
+        {
+          "figure": "3.17",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-03/fig-3-17.png",
+          "crop": [
+            60.03,
+            42,
+            361.86,
+            191.97
+          ]
+        },
+        {
+          "figure": "3.18",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-03/fig-3-18.png",
+          "crop": [
+            66.32,
+            55.72,
+            382.19,
+            208.52
+          ]
+        },
+        {
+          "figure": "3.19",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-03/fig-3-19.png",
+          "crop": [
+            30.26,
+            58.18,
+            404.85,
+            244.06
+          ]
+        },
+        {
+          "figure": "3.20",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-03/fig-3-20.png",
+          "crop": [
+            34.8,
+            49.39,
+            398.71,
+            190.51
+          ]
+        }
+      ],
+      "html": "chapters/chapter-03.html"
+    },
+    {
+      "chapter": 4,
+      "title": "动态行为",
+      "markdown_chars": 34095,
+      "figures": [
+        {
+          "figure": "4.1",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-04/fig-4-1.png",
+          "crop": [
+            39.03,
+            49.34,
+            391.58,
+            189.17
+          ]
+        },
+        {
+          "figure": "4.2",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-04/fig-4-2.png",
+          "crop": [
+            40.69,
+            47.9,
+            400.21,
+            164.94
+          ]
+        },
+        {
+          "figure": "4.3",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-04/fig-4-3.png",
+          "crop": [
+            66.73,
+            48.66,
+            363.73,
+            204.79
+          ]
+        },
+        {
+          "figure": "4.4",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-04/fig-4-4.png",
+          "crop": [
+            34.72,
+            42.33,
+            389.48,
+            186.92
+          ]
+        },
+        {
+          "figure": "4.5",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-04/fig-4-5.png",
+          "crop": [
+            52.71,
+            48.66,
+            378.56,
+            206.79
+          ]
+        },
+        {
+          "figure": "4.6",
+          "found": true,
+          "page": 8,
+          "image": "../assets/figures/chapter-04/fig-4-6.png",
+          "crop": [
+            48.64,
+            44.16,
+            386.87,
+            145.23
+          ]
+        },
+        {
+          "figure": "4.7",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-04/fig-4-7.png",
+          "crop": [
+            49.2,
+            48.17,
+            378.61,
+            192.49
+          ]
+        },
+        {
+          "figure": "4.8",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-04/fig-4-8.png",
+          "crop": [
+            49.2,
+            451.0,
+            378.61,
+            594.54
+          ]
+        },
+        {
+          "figure": "4.9",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-04/fig-4-9.png",
+          "crop": [
+            45.86,
+            48.95,
+            383.02,
+            192.49
+          ]
+        },
+        {
+          "figure": "4.10",
+          "found": true,
+          "page": 11,
+          "image": "../assets/figures/chapter-04/fig-4-10.png",
+          "crop": [
+            36.99,
+            57.84,
+            394.97,
+            200.61
+          ]
+        },
+        {
+          "figure": "4.11",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-04/fig-4-11.png",
+          "crop": [
+            44.48,
+            48.64,
+            387.83,
+            204.79
+          ]
+        },
+        {
+          "figure": "4.12",
+          "found": true,
+          "page": 17,
+          "image": "../assets/figures/chapter-04/fig-4-12.png",
+          "crop": [
+            55.08,
+            48.85,
+            374.52,
+            192.51
+          ]
+        },
+        {
+          "figure": "4.13",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-04/fig-4-13.png",
+          "crop": [
+            128.2,
+            42,
+            306.08,
+            179.42
+          ]
+        },
+        {
+          "figure": "4.14",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-04/fig-4-14.png",
+          "crop": [
+            80.99,
+            49.33,
+            358.85,
+            205.46
+          ]
+        },
+        {
+          "figure": "4.15",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-04/fig-4-15.png",
+          "crop": [
+            50.56,
+            49.35,
+            378.07,
+            190.51
+          ]
+        },
+        {
+          "figure": "4.16",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-04/fig-4-16.png",
+          "crop": [
+            28.95,
+            42,
+            403.6,
+            200.46
+          ]
+        },
+        {
+          "figure": "4.17",
+          "found": true,
+          "page": 28,
+          "image": "../assets/figures/chapter-04/fig-4-17.png",
+          "crop": [
+            34.11,
+            58.68,
+            408.72,
+            214.76
+          ]
+        },
+        {
+          "figure": "4.18",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-04/fig-4-18.png",
+          "crop": [
+            68.53,
+            48.63,
+            368.53,
+            204.79
+          ]
+        },
+        {
+          "figure": "4.19",
+          "found": true,
+          "page": 30,
+          "image": "../assets/figures/chapter-04/fig-4-19.png",
+          "crop": [
+            29.24,
+            52.36,
+            400.49,
+            218.21
+          ]
+        },
+        {
+          "figure": "4.20",
+          "found": true,
+          "page": 32,
+          "image": "../assets/figures/chapter-04/fig-4-20.png",
+          "crop": [
+            45.03,
+            44.17,
+            387.51,
+            231.81
+          ]
+        }
+      ],
+      "html": "chapters/chapter-04.html"
+    },
+    {
+      "chapter": 5,
+      "title": "线性系统",
+      "markdown_chars": 37007,
+      "figures": [
+        {
+          "figure": "5.1",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-05/fig-5-1.png",
+          "crop": [
+            45.17,
+            54.92,
+            388.17,
+            265.11
+          ]
+        },
+        {
+          "figure": "5.2",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-05/fig-5-2.png",
+          "crop": [
+            36.91,
+            59.45,
+            388.07,
+            215.42
+          ]
+        },
+        {
+          "figure": "5.3",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-05/fig-5-3.png",
+          "crop": [
+            25.26,
+            42,
+            407.22,
+            125.34
+          ]
+        },
+        {
+          "figure": "5.4",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-05/fig-5-4.png",
+          "crop": [
+            26.39,
+            42.27,
+            401.39,
+            122.37
+          ]
+        },
+        {
+          "figure": "5.5",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-05/fig-5-5.png",
+          "crop": [
+            58.28,
+            49.51,
+            373.31,
+            193.18
+          ]
+        },
+        {
+          "figure": "5.6",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-05/fig-5-6.png",
+          "crop": [
+            33.28,
+            55.49,
+            374.27,
+            175.46
+          ]
+        },
+        {
+          "figure": "5.7",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-05/fig-5-7.png",
+          "crop": [
+            57.99,
+            46.35,
+            368.53,
+            144.97
+          ]
+        },
+        {
+          "figure": "5.8",
+          "found": true,
+          "page": 20,
+          "image": "../assets/figures/chapter-05/fig-5-8.png",
+          "crop": [
+            40.28,
+            48.82,
+            397.07,
+            168.83
+          ]
+        },
+        {
+          "figure": "5.9",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-05/fig-5-9.png",
+          "crop": [
+            42.75,
+            48.82,
+            387.37,
+            189.85
+          ]
+        },
+        {
+          "figure": "5.10",
+          "found": true,
+          "page": 22,
+          "image": "../assets/figures/chapter-05/fig-5-10.png",
+          "crop": [
+            24.38,
+            42,
+            399.46,
+            213.45
+          ]
+        },
+        {
+          "figure": "5.11",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-05/fig-5-11.png",
+          "crop": [
+            33.87,
+            50.81,
+            398.01,
+            206.79
+          ]
+        },
+        {
+          "figure": "5.12",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-05/fig-5-12.png",
+          "crop": [
+            24.0,
+            46.3,
+            387.35,
+            204.92
+          ]
+        },
+        {
+          "figure": "5.13",
+          "found": true,
+          "page": 26,
+          "image": "../assets/figures/chapter-05/fig-5-13.png",
+          "crop": [
+            24.06,
+            46.3,
+            407.82,
+            204.92
+          ]
+        },
+        {
+          "figure": "5.14",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-05/fig-5-14.png",
+          "crop": [
+            24.45,
+            42.51,
+            405.56,
+            237.8
+          ]
+        },
+        {
+          "figure": "5.15",
+          "found": true,
+          "page": 32,
+          "image": "../assets/figures/chapter-05/fig-5-15.png",
+          "crop": [
+            71.83,
+            47.65,
+            363.16,
+            145.1
+          ]
+        }
+      ],
+      "html": "chapters/chapter-05.html"
+    },
+    {
+      "chapter": 6,
+      "title": "状态反馈",
+      "markdown_chars": 33466,
+      "figures": [
+        {
+          "figure": "6.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-06/fig-6-1.png",
+          "crop": [
+            36.67,
+            55.42,
+            399.5,
+            181.13
+          ]
+        },
+        {
+          "figure": "6.3",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-06/fig-6-3.png",
+          "crop": [
+            68.97,
+            42,
+            363.45,
+            195.97
+          ]
+        },
+        {
+          "figure": "6.4",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-06/fig-6-4.png",
+          "crop": [
+            30.52,
+            42,
+            403.89,
+            207.08
+          ]
+        },
+        {
+          "figure": "6.5",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-06/fig-6-5.png",
+          "crop": [
+            75.33,
+            47.1,
+            356.76,
+            159.42
+          ]
+        },
+        {
+          "figure": "6.6",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-06/fig-6-6.png",
+          "crop": [
+            38.9,
+            42,
+            401.72,
+            250.08
+          ]
+        },
+        {
+          "figure": "6.7",
+          "found": true,
+          "page": 17,
+          "image": "../assets/figures/chapter-06/fig-6-7.png",
+          "crop": [
+            51.8,
+            58.59,
+            376.37,
+            214.76
+          ]
+        },
+        {
+          "figure": "6.8",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-06/fig-6-8.png",
+          "crop": [
+            24,
+            48.2,
+            401.67,
+            204.92
+          ]
+        },
+        {
+          "figure": "6.9",
+          "found": true,
+          "page": 20,
+          "image": "../assets/figures/chapter-06/fig-6-9.png",
+          "crop": [
+            54.41,
+            46.26,
+            381.33,
+            204.93
+          ]
+        },
+        {
+          "figure": "6.10",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-06/fig-6-10.png",
+          "crop": [
+            44.28,
+            49.49,
+            388.91,
+            237.13
+          ]
+        },
+        {
+          "figure": "6.11",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-06/fig-6-11.png",
+          "crop": [
+            38.7,
+            42,
+            398.7,
+            251.41
+          ]
+        },
+        {
+          "figure": "6.12",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-06/fig-6-12.png",
+          "crop": [
+            40.82,
+            45.51,
+            389.3,
+            165.5
+          ]
+        },
+        {
+          "figure": "6.13",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-06/fig-6-13.png",
+          "crop": [
+            75.25,
+            469.86,
+            359.83,
+            574.29
+          ]
+        },
+        {
+          "figure": "6.14",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-06/fig-6-14.png",
+          "crop": [
+            34.55,
+            49.78,
+            397.73,
+            169.49
+          ]
+        },
+        {
+          "figure": "6.15",
+          "found": true,
+          "page": 31,
+          "image": "../assets/figures/chapter-06/fig-6-15.png",
+          "crop": [
+            46.14,
+            49.44,
+            388.53,
+            150.55
+          ]
+        }
+      ],
+      "html": "chapters/chapter-06.html"
+    },
+    {
+      "chapter": 7,
+      "title": "输出反馈",
+      "markdown_chars": 26565,
+      "figures": [
+        {
+          "figure": "7.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-07/fig-7-1.png",
+          "crop": [
+            88.73,
+            48.86,
+            346.31,
+            140.92
+          ]
+        },
+        {
+          "figure": "7.2",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-07/fig-7-2.png",
+          "crop": [
+            59.59,
+            47.37,
+            382.6,
+            196.97
+          ]
+        },
+        {
+          "figure": "7.4",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-07/fig-7-4.png",
+          "crop": [
+            58.16,
+            49.32,
+            361.75,
+            190.51
+          ]
+        },
+        {
+          "figure": "7.5",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-07/fig-7-5.png",
+          "crop": [
+            85.3,
+            42.45,
+            349.63,
+            193.29
+          ]
+        },
+        {
+          "figure": "7.6",
+          "found": true,
+          "page": 11,
+          "image": "../assets/figures/chapter-07/fig-7-6.png",
+          "crop": [
+            32.21,
+            49.44,
+            404.1,
+            193.18
+          ]
+        },
+        {
+          "figure": "7.8",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-07/fig-7-8.png",
+          "crop": [
+            36.52,
+            48.82,
+            393.29,
+            192.51
+          ]
+        },
+        {
+          "figure": "7.9",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-07/fig-7-9.png",
+          "crop": [
+            38.38,
+            59.33,
+            394.96,
+            215.42
+          ]
+        },
+        {
+          "figure": "7.10",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-07/fig-7-10.png",
+          "crop": [
+            24,
+            42.46,
+            408.72,
+            159.55
+          ]
+        },
+        {
+          "figure": "7.11",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-07/fig-7-11.png",
+          "crop": [
+            25.47,
+            48.82,
+            405.84,
+            207.46
+          ]
+        },
+        {
+          "figure": "7.12",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-07/fig-7-12.png",
+          "crop": [
+            29.17,
+            42.38,
+            405.82,
+            187.99
+          ]
+        },
+        {
+          "figure": "7.13",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-07/fig-7-13.png",
+          "crop": [
+            44.83,
+            48.05,
+            390.16,
+            246.48
+          ]
+        }
+      ],
+      "html": "chapters/chapter-07.html"
+    },
+    {
+      "chapter": 8,
+      "title": "传递函数",
+      "markdown_chars": 35129,
+      "figures": [
+        {
+          "figure": "8.1",
+          "found": true,
+          "page": 1,
+          "image": "../assets/figures/chapter-08/fig-8-1.png",
+          "crop": [
+            51.63,
+            448.83,
+            383.46,
+            572.75
+          ]
+        },
+        {
+          "figure": "8.2",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-08/fig-8-2.png",
+          "crop": [
+            42.46,
+            58.8,
+            399.53,
+            285.61
+          ]
+        },
+        {
+          "figure": "8.4",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-08/fig-8-4.png",
+          "crop": [
+            128.85,
+            46.84,
+            289.53,
+            165.86
+          ]
+        },
+        {
+          "figure": "8.6",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-08/fig-8-6.png",
+          "crop": [
+            30.02,
+            42,
+            398.51,
+            174.36
+          ]
+        },
+        {
+          "figure": "8.7",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-08/fig-8-7.png",
+          "crop": [
+            58.3,
+            47.1,
+            376.63,
+            151.54
+          ]
+        },
+        {
+          "figure": "8.11",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-08/fig-8-11.png",
+          "crop": [
+            40.94,
+            51.26,
+            390.73,
+            239.12
+          ]
+        },
+        {
+          "figure": "8.12",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-08/fig-8-12.png",
+          "crop": [
+            37.39,
+            42,
+            394.16,
+            237.21
+          ]
+        },
+        {
+          "figure": "8.13",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-08/fig-8-13.png",
+          "crop": [
+            32.56,
+            42,
+            396.85,
+            259.39
+          ]
+        },
+        {
+          "figure": "8.14",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-08/fig-8-14.png",
+          "crop": [
+            39.95,
+            51.26,
+            394.79,
+            240.46
+          ]
+        },
+        {
+          "figure": "8.16",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-08/fig-8-16.png",
+          "crop": [
+            46.04,
+            52.35,
+            384.8,
+            213.93
+          ]
+        },
+        {
+          "figure": "8.17",
+          "found": true,
+          "page": 30,
+          "image": "../assets/figures/chapter-08/fig-8-17.png",
+          "crop": [
+            109.03,
+            51.29,
+            319.64,
+            240.46
+          ]
+        },
+        {
+          "figure": "8.18",
+          "found": true,
+          "page": 31,
+          "image": "../assets/figures/chapter-08/fig-8-18.png",
+          "crop": [
+            36.48,
+            42.15,
+            396.07,
+            146.92
+          ]
+        },
+        {
+          "figure": "8.19",
+          "found": true,
+          "page": 32,
+          "image": "../assets/figures/chapter-08/fig-8-19.png",
+          "crop": [
+            44.28,
+            46.51,
+            384.07,
+            190.51
+          ]
+        }
+      ],
+      "html": "chapters/chapter-08.html"
+    },
+    {
+      "chapter": 9,
+      "title": "频域分析",
+      "markdown_chars": 24436,
+      "figures": [
+        {
+          "figure": "9.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-09/fig-9-1.png",
+          "crop": [
+            54.32,
+            42,
+            376.12,
+            141.15
+          ]
+        },
+        {
+          "figure": "9.2",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-09/fig-9-2.png",
+          "crop": [
+            26.72,
+            47.22,
+            402.48,
+            151.92
+          ]
+        },
+        {
+          "figure": "9.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-09/fig-9-3.png",
+          "crop": [
+            54.76,
+            48.22,
+            361.43,
+            200.66
+          ]
+        },
+        {
+          "figure": "9.4",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-09/fig-9-4.png",
+          "crop": [
+            115.42,
+            48.26,
+            319.54,
+            185.85
+          ]
+        },
+        {
+          "figure": "9.5",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-09/fig-9-5.png",
+          "crop": [
+            42.57,
+            46.19,
+            398.93,
+            203.57
+          ]
+        },
+        {
+          "figure": "9.6",
+          "found": true,
+          "page": 8,
+          "image": "../assets/figures/chapter-09/fig-9-6.png",
+          "crop": [
+            30.04,
+            47.91,
+            405.16,
+            191.58
+          ]
+        },
+        {
+          "figure": "9.7",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-09/fig-9-7.png",
+          "crop": [
+            75.36,
+            48.12,
+            362.0,
+            167.15
+          ]
+        },
+        {
+          "figure": "9.8",
+          "found": true,
+          "page": 11,
+          "image": "../assets/figures/chapter-09/fig-9-8.png",
+          "crop": [
+            96.51,
+            44.92,
+            363.55,
+            183.48
+          ]
+        },
+        {
+          "figure": "9.9",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-09/fig-9-9.png",
+          "crop": [
+            39.66,
+            50.84,
+            378.75,
+            209.31
+          ]
+        },
+        {
+          "figure": "9.10",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-09/fig-9-10.png",
+          "crop": [
+            38.59,
+            50.78,
+            379.84,
+            194.51
+          ]
+        },
+        {
+          "figure": "9.11",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-09/fig-9-11.png",
+          "crop": [
+            24,
+            61.08,
+            404.94,
+            207.43
+          ]
+        },
+        {
+          "figure": "9.12",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-09/fig-9-12.png",
+          "crop": [
+            35.54,
+            46.25,
+            382.94,
+            189.97
+          ]
+        },
+        {
+          "figure": "9.13",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-09/fig-9-13.png",
+          "crop": [
+            34.79,
+            61.1,
+            407.98,
+            204.17
+          ]
+        },
+        {
+          "figure": "9.14",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-09/fig-9-14.png",
+          "crop": [
+            37.15,
+            50.67,
+            391.74,
+            209.46
+          ]
+        },
+        {
+          "figure": "9.15",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-09/fig-9-15.png",
+          "crop": [
+            141.76,
+            42,
+            291.33,
+            125.8
+          ]
+        },
+        {
+          "figure": "9.16",
+          "found": true,
+          "page": 22,
+          "image": "../assets/figures/chapter-09/fig-9-16.png",
+          "crop": [
+            73.17,
+            48.14,
+            344.68,
+            183.48
+          ]
+        },
+        {
+          "figure": "9.17",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-09/fig-9-17.png",
+          "crop": [
+            28.27,
+            49.85,
+            398.61,
+            162.17
+          ]
+        }
+      ],
+      "html": "chapters/chapter-09.html"
+    },
+    {
+      "chapter": 10,
+      "title": "PID 控制",
+      "markdown_chars": 19984,
+      "figures": [
+        {
+          "figure": "10.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-10/fig-10-1.png",
+          "crop": [
+            27.76,
+            42.35,
+            406.89,
+            192.73
+          ]
+        },
+        {
+          "figure": "10.2",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-10/fig-10-2.png",
+          "crop": [
+            37.87,
+            42,
+            401.31,
+            238.29
+          ]
+        },
+        {
+          "figure": "10.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-10/fig-10-3.png",
+          "crop": [
+            33.8,
+            42,
+            399.14,
+            138.32
+          ]
+        },
+        {
+          "figure": "10.4",
+          "found": true,
+          "page": 6,
+          "image": "../assets/figures/chapter-10/fig-10-4.png",
+          "crop": [
+            38.81,
+            48.88,
+            386.79,
+            164.83
+          ]
+        },
+        {
+          "figure": "10.5",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-10/fig-10-5.png",
+          "crop": [
+            44.82,
+            50.84,
+            373.65,
+            209.46
+          ]
+        },
+        {
+          "figure": "10.6",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-10/fig-10-6.png",
+          "crop": [
+            35.73,
+            42,
+            394.21,
+            250.08
+          ]
+        },
+        {
+          "figure": "10.7",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-10/fig-10-7.png",
+          "crop": [
+            59.92,
+            50.15,
+            354.37,
+            185.48
+          ]
+        },
+        {
+          "figure": "10.8",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-10/fig-10-8.png",
+          "crop": [
+            40.53,
+            49.54,
+            392.57,
+            208.12
+          ]
+        },
+        {
+          "figure": "10.9",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-10/fig-10-9.png",
+          "crop": [
+            33.13,
+            49.52,
+            391.93,
+            165.5
+          ]
+        },
+        {
+          "figure": "10.10",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-10/fig-10-10.png",
+          "crop": [
+            42.86,
+            42,
+            395.72,
+            246.75
+          ]
+        },
+        {
+          "figure": "10.11",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-10/fig-10-11.png",
+          "crop": [
+            57.31,
+            42,
+            375.64,
+            200.45
+          ]
+        },
+        {
+          "figure": "10.12",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-10/fig-10-12.png",
+          "crop": [
+            36.76,
+            44.23,
+            398.82,
+            250.29
+          ]
+        },
+        {
+          "figure": "10.13",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-10/fig-10-13.png",
+          "crop": [
+            28.93,
+            324.17,
+            403.63,
+            598.09
+          ]
+        }
+      ],
+      "html": "chapters/chapter-10.html"
+    },
+    {
+      "chapter": 11,
+      "title": "频域设计",
+      "markdown_chars": 28379,
+      "figures": [
+        {
+          "figure": "11.3",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-11/fig-11-3.png",
+          "crop": [
+            27.95,
+            42.43,
+            404.54,
+            176.42
+          ]
+        },
+        {
+          "figure": "11.4",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-11/fig-11-4.png",
+          "crop": [
+            26.32,
+            48.82,
+            395.82,
+            207.46
+          ]
+        },
+        {
+          "figure": "11.5",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-11/fig-11-5.png",
+          "crop": [
+            40.24,
+            49.52,
+            393.76,
+            252.08
+          ]
+        },
+        {
+          "figure": "11.6",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-11/fig-11-6.png",
+          "crop": [
+            48.09,
+            50.82,
+            376.81,
+            209.46
+          ]
+        },
+        {
+          "figure": "11.7",
+          "found": true,
+          "page": 11,
+          "image": "../assets/figures/chapter-11/fig-11-7.png",
+          "crop": [
+            36.51,
+            48.85,
+            396.76,
+            251.41
+          ]
+        },
+        {
+          "figure": "11.8",
+          "found": true,
+          "page": 13,
+          "image": "../assets/figures/chapter-11/fig-11-8.png",
+          "crop": [
+            24,
+            42,
+            406.54,
+            194.38
+          ]
+        },
+        {
+          "figure": "11.9",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-11/fig-11-9.png",
+          "crop": [
+            37.07,
+            42,
+            399.71,
+            222.76
+          ]
+        },
+        {
+          "figure": "11.10",
+          "found": true,
+          "page": 15,
+          "image": "../assets/figures/chapter-11/fig-11-10.png",
+          "crop": [
+            34.43,
+            42,
+            399.0,
+            256.71
+          ]
+        },
+        {
+          "figure": "11.11",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-11/fig-11-11.png",
+          "crop": [
+            40.66,
+            44.41,
+            395.92,
+            207.84
+          ]
+        },
+        {
+          "figure": "11.12",
+          "found": true,
+          "page": 17,
+          "image": "../assets/figures/chapter-11/fig-11-12.png",
+          "crop": [
+            31.61,
+            54.75,
+            394.97,
+            213.42
+          ]
+        },
+        {
+          "figure": "11.13",
+          "found": true,
+          "page": 20,
+          "image": "../assets/figures/chapter-11/fig-11-13.png",
+          "crop": [
+            33.96,
+            58.8,
+            394.95,
+            217.42
+          ]
+        },
+        {
+          "figure": "11.14",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-11/fig-11-14.png",
+          "crop": [
+            37.34,
+            47.05,
+            400.93,
+            203.57
+          ]
+        },
+        {
+          "figure": "11.15",
+          "found": true,
+          "page": 23,
+          "image": "../assets/figures/chapter-11/fig-11-15.png",
+          "crop": [
+            56.4,
+            453.76,
+            371.76,
+            574.16
+          ]
+        },
+        {
+          "figure": "11.16",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-11/fig-11-16.png",
+          "crop": [
+            161.6,
+            43.46,
+            270.6,
+            180.97
+          ]
+        },
+        {
+          "figure": "11.17",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-11/fig-11-17.png",
+          "crop": [
+            24,
+            42.38,
+            408.72,
+            183.17
+          ]
+        },
+        {
+          "figure": "11.18",
+          "found": true,
+          "page": 28,
+          "image": "../assets/figures/chapter-11/fig-11-18.png",
+          "crop": [
+            26.05,
+            50.87,
+            405.03,
+            209.46
+          ]
+        },
+        {
+          "figure": "11.19",
+          "found": true,
+          "page": 29,
+          "image": "../assets/figures/chapter-11/fig-11-19.png",
+          "crop": [
+            26.1,
+            56.3,
+            408.72,
+            214.88
+          ]
+        },
+        {
+          "figure": "11.20",
+          "found": true,
+          "page": 30,
+          "image": "../assets/figures/chapter-11/fig-11-20.png",
+          "crop": [
+            43.72,
+            50.82,
+            393.87,
+            238.9
+          ]
+        }
+      ],
+      "html": "chapters/chapter-11.html"
+    },
+    {
+      "chapter": 12,
+      "title": "鲁棒性能",
+      "markdown_chars": 28845,
+      "figures": [
+        {
+          "figure": "12.1",
+          "found": true,
+          "page": 2,
+          "image": "../assets/figures/chapter-12/fig-12-1.png",
+          "crop": [
+            36.88,
+            48.82,
+            392.24,
+            203.54
+          ]
+        },
+        {
+          "figure": "12.2",
+          "found": true,
+          "page": 3,
+          "image": "../assets/figures/chapter-12/fig-12-2.png",
+          "crop": [
+            24,
+            42,
+            386.6,
+            118.38
+          ]
+        },
+        {
+          "figure": "12.3",
+          "found": true,
+          "page": 4,
+          "image": "../assets/figures/chapter-12/fig-12-3.png",
+          "crop": [
+            37.12,
+            42,
+            397.7,
+            256.74
+          ]
+        },
+        {
+          "figure": "12.4",
+          "found": true,
+          "page": 5,
+          "image": "../assets/figures/chapter-12/fig-12-4.png",
+          "crop": [
+            42.1,
+            46.41,
+            376.43,
+            172.39
+          ]
+        },
+        {
+          "figure": "12.5",
+          "found": true,
+          "page": 7,
+          "image": "../assets/figures/chapter-12/fig-12-5.png",
+          "crop": [
+            64.43,
+            48.22,
+            356.04,
+            200.8
+          ]
+        },
+        {
+          "figure": "12.6",
+          "found": true,
+          "page": 9,
+          "image": "../assets/figures/chapter-12/fig-12-6.png",
+          "crop": [
+            43.93,
+            50.65,
+            402.48,
+            193.17
+          ]
+        },
+        {
+          "figure": "12.7",
+          "found": true,
+          "page": 10,
+          "image": "../assets/figures/chapter-12/fig-12-7.png",
+          "crop": [
+            25.45,
+            42,
+            407.03,
+            148.08
+          ]
+        },
+        {
+          "figure": "12.8",
+          "found": true,
+          "page": 11,
+          "image": "../assets/figures/chapter-12/fig-12-8.png",
+          "crop": [
+            24,
+            42.42,
+            408.72,
+            189.77
+          ]
+        },
+        {
+          "figure": "12.9",
+          "found": true,
+          "page": 12,
+          "image": "../assets/figures/chapter-12/fig-12-9.png",
+          "crop": [
+            51.6,
+            47.1,
+            383.43,
+            161.67
+          ]
+        },
+        {
+          "figure": "12.10",
+          "found": true,
+          "page": 14,
+          "image": "../assets/figures/chapter-12/fig-12-10.png",
+          "crop": [
+            24,
+            42,
+            407.42,
+            134.97
+          ]
+        },
+        {
+          "figure": "12.11",
+          "found": true,
+          "page": 16,
+          "image": "../assets/figures/chapter-12/fig-12-11.png",
+          "crop": [
+            41.58,
+            50.84,
+            378.73,
+            194.51
+          ]
+        },
+        {
+          "figure": "12.12",
+          "found": true,
+          "page": 18,
+          "image": "../assets/figures/chapter-12/fig-12-12.png",
+          "crop": [
+            44.18,
+            49.48,
+            393.87,
+            150.55
+          ]
+        },
+        {
+          "figure": "12.13",
+          "found": true,
+          "page": 19,
+          "image": "../assets/figures/chapter-12/fig-12-13.png",
+          "crop": [
+            37.43,
+            42,
+            399.68,
+            150.55
+          ]
+        },
+        {
+          "figure": "12.14",
+          "found": true,
+          "page": 21,
+          "image": "../assets/figures/chapter-12/fig-12-14.png",
+          "crop": [
+            41.15,
+            49.5,
+            391.2,
+            237.13
+          ]
+        },
+        {
+          "figure": "12.15",
+          "found": true,
+          "page": 22,
+          "image": "../assets/figures/chapter-12/fig-12-15.png",
+          "crop": [
+            43.8,
+            50.76,
+            393.87,
+            238.47
+          ]
+        },
+        {
+          "figure": "12.16",
+          "found": true,
+          "page": 24,
+          "image": "../assets/figures/chapter-12/fig-12-16.png",
+          "crop": [
+            61.71,
+            48.63,
+            408.72,
+            204.79
+          ]
+        },
+        {
+          "figure": "12.17",
+          "found": true,
+          "page": 25,
+          "image": "../assets/figures/chapter-12/fig-12-17.png",
+          "crop": [
+            80.19,
+            42.43,
+            362.87,
+            132.55
+          ]
+        },
+        {
+          "figure": "12.18",
+          "found": true,
+          "page": 27,
+          "image": "../assets/figures/chapter-12/fig-12-18.png",
+          "crop": [
+            24,
+            49.53,
+            408.72,
+            127.51
+          ]
+        }
+      ],
+      "html": "chapters/chapter-12.html"
+    }
+  ]
+}

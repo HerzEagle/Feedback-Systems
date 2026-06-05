@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 6 章 状态反馈 - 反馈系统</title>
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+<div class="layout-wrapper">
+      <aside class="sidebar">
+      <div class="sidebar-title"><a href="../index.html">反馈系统</a></div>
+      <nav aria-label="章节导航">
+        <ol class="nav-list">
+          <li><a class="" href="../chapters/preface.html"><span>前</span>前言</a></li>
+          <li><a class="" href="../chapters/chapter-01.html"><span>01</span>引言</a></li>
+          <li><a class="" href="../chapters/chapter-02.html"><span>02</span>系统建模</a></li>
+          <li><a class="" href="../chapters/chapter-03.html"><span>03</span>例子</a></li>
+          <li><a class="" href="../chapters/chapter-04.html"><span>04</span>动态行为</a></li>
+          <li><a class="" href="../chapters/chapter-05.html"><span>05</span>线性系统</a></li>
+          <li><a class="active" href="../chapters/chapter-06.html"><span>06</span>状态反馈</a></li>
+          <li><a class="" href="../chapters/chapter-07.html"><span>07</span>输出反馈</a></li>
+          <li><a class="" href="../chapters/chapter-08.html"><span>08</span>传递函数</a></li>
+          <li><a class="" href="../chapters/chapter-09.html"><span>09</span>频域分析</a></li>
+          <li><a class="" href="../chapters/chapter-10.html"><span>10</span>PID 控制</a></li>
+          <li><a class="" href="../chapters/chapter-11.html"><span>11</span>频域设计</a></li>
+          <li><a class="" href="../chapters/chapter-12.html"><span>12</span>鲁棒性能</a></li>
+          <li><a class="" href="../chapters/bibliography.html"><span>文</span>文献列表</a></li>
+        </ol>
+      </nav>
+    </aside>
+      <main class="main-content">
+        <div class="toolbar" aria-label="阅读工具">
+      <button class="toolbar-btn" id="fontDecrease" type="button" title="减小字号">A-</button>
+      <button class="toolbar-btn" id="fontIncrease" type="button" title="增大字号">A+</button>
+      <button class="toolbar-btn" id="themeToggle" type="button">护眼模式</button>
+    </div>
+        <article class="content-area serif-content">
+          <h1 id="第-6-章-状态反馈">第 6 章 状态反馈</h1>
+<blockquote class="chapter-epigraph">
+  <p class="epigraph-text">直观地说，状态可以看成一种信息存储、记忆，或者过去原因的累积。当然，我们必须要求内部状态集合 \(\Sigma\) 足够丰富，能够携带关于 \(\Sigma\) 过去历史的全部信息，从而预测过去对未来的影响。不过，我们并不坚持状态必须是这类信息中最少的一组，虽然这常常是一个方便的假设。</p>
+  <footer class="epigraph-source">R. E. 卡尔曼、P. L. 法尔布、M. A. 阿尔比布，《数学系统理论专题》，1969 <sup class="citation">[<a href="bibliography.html#ref-117">117</a>]</sup>。</footer>
+</blockquote>
+<p>本章说明如何用系统状态的反馈来塑造系统的局部行为。我们将引入可达性的概念，并用它研究怎样通过指定系统特征值来设计系统动态。特别地，本章会说明，在某些条件下，只要适当地反馈系统状态，就可以任意指定系统特征值。</p>
+<h2 id="6.1-可达性">6.1 可达性</h2>
+<p>控制系统的一个基本性质，是通过选择控制输入可以到达状态空间中的哪些点。事实证明，可达性也是理解反馈能够在多大程度上用于设计系统动态的基本概念。</p>
+<h3 id="可达性的定义">可达性的定义</h3>
+<p>先忽略系统的输出测量，只关注状态演化：</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu,
+\tag{6.1}
+\]</div>
+<p>其中 \(x\in\mathbb{R}^n\)、\(u\in\mathbb{R}\)，\(A\) 是 \(n\times n\) 矩阵，\(B\) 是列向量。一个基本问题是：能否找到控制信号，使得状态空间中的任意一点都能通过某种输入选择到达。为研究这个问题，定义可达集 \(R(x_0,\le T)\)：它是所有满足下面条件的点 \(x_f\) 的集合，即存在输入 \(u(t)\)、\(0\le t\le T\)，能够把系统从 \(x(0)=x_0\) 驱动到 \(x(T)=x_f\)。图 6.1a 示意了这个概念。</p>
+<p><strong>定义 6.1 可达性</strong> 如果对任意 \(x_0,x_f\in\mathbb{R}^n\)，都存在 \(T&gt;0\) 和 \(u:[0,T]\to\mathbb{R}\)，使相应解满足 \(x(0)=x_0\)、\(x(T)=x_f\)，则称这个线性系统是可达的。</p>
+<figure class="figure-block"><img alt="图 6.1" loading="lazy" src="../assets/figures/chapter-06/fig-6-1.png"/><figcaption>图 6.1：控制系统的可达集。图 (a) 中的 \(R(x_0,\le T)\) 是从 \(x_0\) 出发，在不超过 \(T\) 的时间内可达的点集。图 (b) 显示双积分器的动态，相图中水平箭头表示自然动态，竖直箭头表示控制输入。可实现的平衡点集合是 \(x\) 轴。把控制输入设置为状态的函数，就可以把系统驱动到原点，示例路径如图所示。</figcaption></figure>
+<p>可达性的定义讨论的是能否以暂态方式到达状态空间中的所有点。在许多应用中，我们最关心到达的是系统的平衡点集合，因为一旦到达这些点，就可以停留在那里。所有由常值控制产生的可能平衡点组成集合</p>
+<div class="math-block">\[
+E=\{x_e:Ax_e+Bu_e=0,\ \text{其中某个 }u_e\in\mathbb{R}\}.
+\]</div>
+<p>这意味着，可能的平衡点位于一个一维，或可能更高维的子空间中。如果矩阵 \(A\) 可逆，这个子空间由 \(A^{-1}B\) 张成。下面例子提供一些直观认识。</p>
+<h3 id="例-6.1-双积分器">例 6.1 双积分器</h3>
+<p>考虑由双积分器构成的线性系统，其动态为</p>
+<div class="math-block">\[
+\frac{dx_1}{dt}=x_2,\qquad \frac{dx_2}{dt}=u.
+\]</div>
+<p>图 6.1b 给出了该系统的相图。开环动态，也就是 \(u=0\) 的情形，用水平箭头表示：当 \(x_2&gt;0\) 时箭头向右，当 \(x_2&lt;0\) 时箭头向左。控制输入用竖直方向的双向箭头表示，对应于我们可以设定 \(\dot x_2\) 的值。平衡点集合 \(E\) 对应于 \(x_1\) 轴，并且 \(u_e=0\)。</p>
+<p>先假设希望从初始条件 \((a,0)\) 到达原点。我们可以在相平面中直接让状态上下运动，但左右方向的运动必须依靠自然动态。如果 \(a&gt;0\)，可以先设 \(u&lt;0\)，使 \(x_2\) 变为负。一旦 \(x_2&lt;0\)，\(x_1\) 就开始减小，状态向左移动。过一段时间后，可以把 \(u\) 设为正，使 \(x_2\) 回到零附近，并减慢 \(x_1\) 方向的运动。如果让 \(x_2&gt;0\)，系统状态就会朝相反方向移动。</p>
+<p>图 6.1b 中显示了一条把系统带到原点的示例轨迹。注意，如果把系统驱动到一个平衡点，就可以无限期停留在那里，因为当 \(x_2=0\) 时 \(\dot x_1=0\)。但如果到达状态空间中的其他点，就只能以暂态方式经过该点。</p>
+<p>为了找到线性系统可达的一般条件，我们先给出一个基于冲激函数形式计算的启发式论证。还要注意，如果能够通过某种输入选择到达状态空间中的所有点，那么自然也能到达所有平衡点。</p>
+<h3 id="可达性检验">可达性检验</h3>
+<p>当初始状态为零时，系统对输入 \(u(t)\) 的响应为</p>
+<div class="math-block">\[
+x(t)=\int_0^t e^{A(t-\tau)}Bu(\tau)\,d\tau.
+\tag{6.2}
+\]</div>
+<p>如果选取输入为第 5.3 节定义的冲激函数 \(\delta(t)\)，则状态变为</p>
+<div class="math-block">\[
+x_\delta=\int_0^t e^{A(t-\tau)}B\delta(\tau)\,d\tau=e^{At}B.
+\]</div>
+<p>注意，状态会对冲激发生瞬时变化。对冲激响应求导，就能得到对冲激函数导数的响应，见习题 5.1：</p>
+<div class="math-block">\[
+x_{\dot\delta}=\frac{dx_\delta}{dt}=Ae^{At}B.
+\]</div>
+<p>继续这个过程，并利用系统线性性，输入</p>
+<div class="math-block">\[
+u(t)=\alpha_1\delta(t)+\alpha_2\dot\delta(t)
++\alpha_3\ddot\delta(t)+\cdots
++\alpha_n\delta^{(n-1)}(t)
+\]</div>
+<p>给出的状态为</p>
+<div class="math-block">\[
+x(t)=\alpha_1e^{At}B+\alpha_2Ae^{At}B+\alpha_3A^2e^{At}B
++\cdots+\alpha_nA^{n-1}e^{At}B.
+\]</div>
+<p>令 \(t\) 从正值趋近于零，得到</p>
+<div class="math-block">\[
+\lim_{t\to0^+}x(t)
+=\alpha_1B+\alpha_2AB+\alpha_3A^2B+\cdots+\alpha_nA^{n-1}B.
+\]</div>
+<p>右端是下面矩阵各列的线性组合：</p>
+<div class="math-block">\[
+W_r=\begin{bmatrix}B&amp;AB&amp;\cdots&amp;A^{n-1}B\end{bmatrix}.
+\tag{6.3}
+\]</div>
+<p>因此，要到达状态空间中的任意点，就需要矩阵 \(W_r\) 有 \(n\) 个线性无关的列。矩阵 \(W_r\) 称为可达性矩阵。</p>
+<p>由冲激函数及其导数组成的输入是一种非常剧烈的信号。为了看出任意点也能用更平滑的信号到达，可以使用卷积方程。假设初始条件为零，则线性系统的状态为</p>
+<div class="math-block">\[
+x(t)=\int_0^t e^{A(t-\tau)}Bu(\tau)\,d\tau
+=\int_0^t e^{A\tau}Bu(t-\tau)\,d\tau.
+\]</div>
+<p>由矩阵函数理论，特别是 Cayley-Hamilton 定理，见习题 6.10，可知</p>
+<div class="math-block">\[
+e^{A\tau}=I\alpha_0(\tau)+A\alpha_1(\tau)+\cdots+A^{n-1}\alpha_{n-1}(\tau),
+\]</div>
+<p>其中 \(\alpha_i(\tau)\) 是标量函数。于是</p>
+<div class="math-block">\[
+\begin{aligned}
+x(t)
+&amp;=B\int_0^t\alpha_0(\tau)u(t-\tau)\,d\tau
+ +AB\int_0^t\alpha_1(\tau)u(t-\tau)\,d\tau\\
+&amp;\quad+\cdots
+ +A^{n-1}B\int_0^t\alpha_{n-1}(\tau)u(t-\tau)\,d\tau.
+\end{aligned}
+\]</div>
+<p>我们再次看到，右端是式 (6.3) 中可达性矩阵 \(W_r\) 各列的线性组合。这个基本思路引出下面定理。</p>
+<p><strong>定理 6.1 可达性秩条件</strong> 线性系统可达，当且仅当可达性矩阵 \(W_r\) 可逆。</p>
+<p>这个定理的形式证明超出了本书范围，但证明思路与上面的草图一致，可见大多数线性控制理论教材，例如 Callier 和 Desoer <sup class="citation">[<a href="bibliography.html#ref-48">48</a>]</sup> 或 Lewis <sup class="citation">[<a href="bibliography.html#ref-136">136</a>]</sup>。下面用一个例子说明可达性的概念。</p>
+<h3 id="例-6.2-平衡系统">例 6.2 平衡系统</h3>
+<p>考虑例 2.1 中引入、图 6.2 所示的平衡系统。回忆一下，这个系统是一类质心位于支点上方的例子的模型。图 6.2a 中的赛格威个人运输车就是一个例子。一个很自然的问题是，能否通过对车轮施加适当力，把系统从一个静止点移动到另一个静止点。</p>
+<p>系统的非线性运动方程见式 (2.9)，这里重写为</p>
+<div class="math-block">\[
+(M+m)\ddot p-ml\cos\theta\,\ddot\theta
+=-c\dot p-ml\sin\theta\,\dot\theta^2+F,
+\]</div>
+<div class="math-block">\[
+(J+ml^2)\ddot\theta-ml\cos\theta\,\ddot p
+=-\gamma\dot\theta+mgl\sin\theta.
+\tag{6.4}
+\]</div>
+<p>为简化起见，取 \(c=\gamma=0\)。在平衡点</p>
+<div class="math-block">\[
+x_e=(p,0,0,0)
+\]</div>
+<p>附近线性化，动态矩阵与控制矩阵为</p>
+<div class="math-block">\[
+A=
+\begin{bmatrix}
+0&amp;0&amp;1&amp;0\\
+0&amp;0&amp;0&amp;1\\
+0&amp;m^2l^2g/\mu&amp;0&amp;0\\
+0&amp;M_tmgl/\mu&amp;0&amp;0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+0\\
+0\\
+J_t/\mu\\
+lm/\mu
+\end{bmatrix},
+\]</div>
+<p>其中</p>
+<div class="math-block">\[
+\mu=M_tJ_t-m^2l^2,\qquad M_t=M+m,\qquad J_t=J+ml^2.
+\]</div>
+<p>可达性矩阵为</p>
+<div class="math-block">\[
+W_r=
+\begin{bmatrix}
+0&amp;J_t/\mu&amp;0&amp;gl^3m^3/\mu^2\\
+0&amp;lm/\mu&amp;0&amp;gl^2m^2(M+m)/\mu^2\\
+J_t/\mu&amp;0&amp;gl^3m^3/\mu^2&amp;0\\
+lm/\mu&amp;0&amp;gl^2m^2(M+m)/\mu^2&amp;0
+\end{bmatrix}.
+\tag{6.5}
+\]</div>
+<p>这个矩阵的行列式为</p>
+<div class="math-block">\[
+\det(W_r)=\frac{g^2l^4m^4}{\mu^4}\ne0.
+\]</div>
+<p>因此系统可达。这意味着，可以把系统从任意初始状态移动到任意最终状态。特别地，总能找到输入，把系统从某个初始状态带到一个平衡点。</p>
+<p>理解系统为何不可达也很有用。图 6.3 给出了一个不可达系统的例子。系统由两个相同子系统组成，并且它们受到同一个输入。显然，我们不能让第一个和第二个子系统分别做不同的事情，因为二者输入相同。因此无法到达任意状态，系统不可达，见习题 6.3。</p>
+<figure class="figure-block"><img alt="图 6.3" loading="lazy" src="../assets/figures/chapter-06/fig-6-3.png"/><figcaption>图 6.3：不可达系统。左侧小车摆系统只有一个输入，它同时影响两个长度和质量相同的摆。由于作用在两个摆上的力相同，并且动态相同，所以不能任意控制系统状态。右侧是这种情况的框图表示。</figcaption></figure>
+<p>不可达还可能由更细致的机制产生。例如，如果存在某个状态线性组合始终保持常数，那么系统就不可达。设存在行向量 \(H\)，使得</p>
+<div class="math-block">\[
+0=\frac{d}{dt}Hx=H(Ax+Bu),\qquad \text{对所有 }u.
+\]</div>
+<p>那么 \(H\) 同时位于 \(A\) 和 \(B\) 的左零空间中，并且</p>
+<div class="math-block">\[
+HW_r=H\begin{bmatrix}B&amp;AB&amp;\cdots&amp;A^{n-1}B\end{bmatrix}=0.
+\]</div>
+<p>因此，可达性矩阵不是满秩。在这种情形下，如果初始条件为 \(x_0\)，而希望到达的状态 \(x_f\) 满足 \(Hx_0\ne Hx_f\)，由于 \(Hx(t)\) 保持常数，任何输入 \(u\) 都无法把系统从 \(x_0\) 移动到 \(x_f\)。</p>
+<h3 id="可达标准形">可达标准形</h3>
+<p>前几章已经看到，改变坐标并在变换坐标 \(z=Tx\) 中写出系统动态，常常很方便。坐标变换的一个用途，是把系统转化为某种标准形，使某些分析变得容易。</p>
+<p>如果线性状态空间系统的动态为</p>
+<div class="math-block">\[
+\frac{dz}{dt}=
+\begin{bmatrix}
+-a_1&amp;-a_2&amp;-a_3&amp;\cdots&amp;-a_n\\
+1&amp;0&amp;0&amp;\cdots&amp;0\\
+0&amp;1&amp;0&amp;\cdots&amp;0\\
+\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;\cdots&amp;1&amp;0
+\end{bmatrix}z+
+\begin{bmatrix}
+1\\
+0\\
+0\\
+\vdots\\
+0
+\end{bmatrix}u,
+\]</div>
+<div class="math-block">\[
+y=\begin{bmatrix}b_1&amp;b_2&amp;b_3&amp;\cdots&amp;b_n\end{bmatrix}z+du,
+\tag{6.6}
+\]</div>
+<p>并且矩阵中低一条对角线上按顺序为 1，则称系统处于可达标准形。图 6.4 给出了可达标准形系统的框图。可以看出，出现在 \(A\) 和 \(B\) 矩阵中的系数会直接出现在框图中。另外，系统输出是各个积分环节输出的一个简单线性组合。</p>
+<figure class="figure-block"><img alt="图 6.4" loading="lazy" src="../assets/figures/chapter-06/fig-6-4.png"/><figcaption>图 6.4：可达标准形系统的框图。系统各个状态由一串积分器表示，积分器输入依赖状态的加权值。输出由系统输入和其他状态的适当组合给出。</figcaption></figure>
+<p>可达标准形系统的特征多项式为</p>
+<div class="math-block">\[
+\lambda(s)=s^n+a_1s^{n-1}+\cdots+a_{n-1}s+a_n.
+\tag{6.7}
+\]</div>
+<p>它的可达性矩阵也具有相对简单的结构：</p>
+<div class="math-block">\[
+W_r=\begin{bmatrix}B&amp;AB&amp;\cdots&amp;A^{n-1}B\end{bmatrix}
+=
+\begin{bmatrix}
+1&amp;-a_1&amp;*&amp;\cdots&amp;*\\
+0&amp;1&amp;-a_1&amp;\cdots&amp;*\\
+\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;0&amp;1&amp;*\\
+0&amp;0&amp;0&amp;\cdots&amp;1
+\end{bmatrix},
+\]</div>
+<p>其中星号表示可能非零的项。由于这个矩阵具有三角结构，没有任何一列可以由其他列线性组合得到，所以它满秩。</p>
+<p>下面考虑如何改变坐标，使系统动态写成可达标准形。令 \(A,B\) 表示给定系统的动态矩阵和控制矩阵，令 \(\tilde A,\tilde B\) 表示可达标准形下的动态矩阵和控制矩阵。假设希望通过坐标变换 \(z=Tx\) 把原系统转化为可达标准形。上一章已经说明，变换后系统的动态矩阵和控制矩阵为</p>
+<div class="math-block">\[
+\tilde A=TAT^{-1},\qquad \tilde B=TB.
+\]</div>
+<p>变换后系统的可达性矩阵为</p>
+<div class="math-block">\[
+\tilde W_r=
+\begin{bmatrix}
+\tilde B&amp;\tilde A\tilde B&amp;\cdots&amp;\tilde A^{n-1}\tilde B
+\end{bmatrix}.
+\]</div>
+<p>逐项变换有</p>
+<div class="math-block">\[
+\tilde A\tilde B=TAT^{-1}TB=TAB,
+\]</div>
+<div class="math-block">\[
+\tilde A^2\tilde B=(TAT^{-1})^2TB=TA^2B,
+\]</div>
+<p>依此类推。因此</p>
+<div class="math-block">\[
+\tilde W_r
+=T\begin{bmatrix}B&amp;AB&amp;\cdots&amp;A^{n-1}B\end{bmatrix}
+=TW_r.
+\tag{6.8}
+\]</div>
+<p>由于 \(W_r\) 可逆，可以求出把系统转化为可达标准形的变换：</p>
+<div class="math-block">\[
+T=\tilde W_rW_r^{-1}.
+\]</div>
+<p>下面例子说明这个方法。</p>
+<h3 id="例-6.3-转换到可达形式">例 6.3 转换到可达形式</h3>
+<p>考虑一个简单二维系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+\alpha&amp;\omega\\
+-\omega&amp;\alpha
+\end{bmatrix}x+
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}u.
+\]</div>
+<p>我们希望找到把系统变为可达标准形的变换：</p>
+<div class="math-block">\[
+\tilde A=
+\begin{bmatrix}
+-a_1&amp;-a_2\\
+1&amp;0
+\end{bmatrix},
+\qquad
+\tilde B=
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}.
+\]</div>
+<p>系数 \(a_1,a_2\) 可由原系统特征多项式确定：</p>
+<div class="math-block">\[
+\lambda(s)=\det(sI-A)=s^2-2\alpha s+(\alpha^2+\omega^2),
+\]</div>
+<p>因此</p>
+<div class="math-block">\[
+a_1=-2\alpha,\qquad a_2=\alpha^2+\omega^2.
+\]</div>
+<p>两个系统的可达性矩阵为</p>
+<div class="math-block">\[
+W_r=
+\begin{bmatrix}
+0&amp;\omega\\
+1&amp;\alpha
+\end{bmatrix},
+\qquad
+\tilde W_r=
+\begin{bmatrix}
+1&amp;-a_1\\
+0&amp;1
+\end{bmatrix}.
+\]</div>
+<p>变换矩阵为</p>
+<div class="math-block">\[
+T=\tilde W_rW_r^{-1}
+=
+\begin{bmatrix}
+\alpha/\omega&amp;1\\
+1/\omega&amp;0
+\end{bmatrix}.
+\]</div>
+<p>因此坐标</p>
+<div class="math-block">\[
+\begin{bmatrix}
+z_1\\
+z_2
+\end{bmatrix}
+=Tx=
+\begin{bmatrix}
+\alpha x_1/\omega+x_2\\
+x_1/\omega
+\end{bmatrix}
+\]</div>
+<p>把系统置于可达标准形。</p>
+<p>本节结果可概括为下面定理。</p>
+<p><strong>定理 6.2 可达标准形</strong> 设 \(A\) 和 \(B\) 是一个可达系统的动态矩阵和控制矩阵。则存在变换 \(z=Tx\)，使得在变换后的坐标中，动态矩阵和控制矩阵处于可达标准形 (6.6)，并且 \(A\) 的特征多项式为</p>
+<div class="math-block">\[
+\det(sI-A)=s^n+a_1s^{n-1}+\cdots+a_{n-1}s+a_n.
+\]</div>
+<p>这个定理的一个重要含义是，对任何可达系统，都可以不失一般性地假设坐标已经选好，使系统处于可达标准形。这对证明特别有用，本章后面会看到。不过，对高阶系统，系数 \(a_i\) 的微小变化可能导致特征值发生很大变化。因此，可达标准形并不总是数值条件良好，使用时需要谨慎。</p>
+<h2 id="6.2-通过状态反馈实现稳定化">6.2 通过状态反馈实现稳定化</h2>
+<p>动态系统的状态是一组变量，它们允许预测系统未来的发展。现在研究通过反馈状态来设计系统动态的想法。为简单起见，假设待控制系统由线性状态模型描述，并且只有一个输入。反馈控制律将围绕一个思想逐步建立：把闭环特征值放置在希望的位置。</p>
+<h3 id="状态空间控制器结构">状态空间控制器结构</h3>
+<p>图 6.5 是一个使用状态反馈的典型控制系统图。完整系统包括线性过程动态、控制器元素 \(K\) 和 \(k_r\)、参考输入或命令信号 \(r\)，以及过程扰动 \(d\)。反馈控制器的目标是在存在扰动和过程动态不确定性时，调节系统输出 \(y\)，使它跟踪参考输入。</p>
+<figure class="figure-block"><img alt="图 6.5" loading="lazy" src="../assets/figures/chapter-06/fig-6-5.png"/><figcaption>图 6.5：带状态反馈的反馈控制系统。控制器利用系统状态 \(x\) 和参考输入 \(r\)，通过输入 \(u\) 指令过程。扰动用加性输入 \(d\) 建模。</figcaption></figure>
+<p>控制设计中的一个重要元素是性能指标。最简单的性能指标是稳定性：没有任何扰动时，希望系统的平衡点渐近稳定。更复杂的性能指标通常会给出系统阶跃响应或频率响应的期望性质，例如指定阶跃响应的上升时间、超调量和调节时间。最后，我们常常还关心系统的扰动衰减性质：在经历扰动输入 \(d\) 时，能够在多大程度上让输出 \(y\) 保持在期望值附近。</p>
+<p>考虑由线性微分方程描述的系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu,\qquad y=Cx+Du,
+\tag{6.9}
+\]</div>
+<p>这里暂时忽略扰动信号 \(d\)。我们的目标是把输出 \(y\) 驱动到给定参考值 \(r\)，并保持在那里。注意，并非所有平衡点都可以维持，见习题 6.8。</p>
+<p>先假设状态向量的所有分量都可以测量。由于时刻 \(t\) 的状态包含预测系统未来行为所需的全部信息，最一般的时不变控制律就是状态和参考输入的函数：</p>
+<div class="math-block">\[
+u=\alpha(x,r).
+\]</div>
+<p>如果反馈限制为线性形式，就可以写成</p>
+<div class="math-block">\[
+u=-Kx+k_rr,
+\tag{6.10}
+\]</div>
+<p>其中 \(r\) 是参考值，这里先假设为常数。</p>
+<p>这个控制律对应图 6.5 的结构。负号是一种约定，表示通常采用负反馈。把反馈 (6.10) 施加到系统 (6.9) 后，得到闭环系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=(A-BK)x+Bk_rr.
+\tag{6.11}
+\]</div>
+<p>我们希望确定反馈增益 \(K\)，使闭环系统具有特征多项式</p>
+<div class="math-block">\[
+p(s)=s^n+p_1s^{n-1}+\cdots+p_{n-1}s+p_n.
+\tag{6.12}
+\]</div>
+<p>这个控制问题称为特征值配置问题，也称为极点配置问题。极点将在第 8 章更正式地定义。</p>
+<p>注意，\(k_r\) 不影响系统稳定性，稳定性由 \(A-BK\) 的特征值决定，但 \(k_r\) 会影响稳态解。特别地，闭环系统的平衡点和稳态输出为</p>
+<div class="math-block">\[
+x_e=-(A-BK)^{-1}Bk_rr,\qquad
+y_e=Cx_e+Du_e.
+\]</div>
+<p>因此应当选择 \(k_r\)，使 \(y_e=r\)，也就是期望输出值。由于 \(k_r\) 是标量，在最常见的 \(D=0\) 情形中容易得到</p>
+<div class="math-block">\[
+k_r=-\frac{1}{C(A-BK)^{-1}B}.
+\tag{6.13}
+\]</div>
+<p>注意，\(k_r\) 正好是闭环系统零频增益的倒数。\(D\ne0\) 时的解留作习题。</p>
+<p>利用增益 \(K\) 和 \(k_r\)，就能设计闭环系统动态，使之满足目标。为了说明如何构造这种状态反馈控制律，先看几个提供直观认识的例子。</p>
+<h3 id="例-6.4-车辆转向">例 6.4 车辆转向</h3>
+<p>例 5.12 中推导了车辆转向的归一化线性模型。描述横向偏差的动态为</p>
+<div class="math-block">\[
+A=
+\begin{bmatrix}
+0&amp;1\\
+0&amp;0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+\gamma\\
+1
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+1&amp;0
+\end{bmatrix},
+\qquad D=0.
+\]</div>
+<p>系统的可达性矩阵为</p>
+<div class="math-block">\[
+W_r=\begin{bmatrix}B&amp;AB\end{bmatrix}
+=
+\begin{bmatrix}
+\gamma&amp;1\\
+1&amp;0
+\end{bmatrix}.
+\]</div>
+<p>由于 \(\det W_r=-1\ne0\)，系统可达。</p>
+<p>现在希望设计一个控制器，使动态稳定，并跟踪给定的车辆横向位置参考值 \(r\)。为此引入反馈</p>
+<div class="math-block">\[
+u=-Kx+k_rr=-k_1x_1-k_2x_2+k_rr.
+\]</div>
+<p>闭环系统变为</p>
+<div class="math-block">\[
+\frac{dx}{dt}=(A-BK)x+Bk_rr
+=
+\begin{bmatrix}
+-\gamma k_1&amp;1-\gamma k_2\\
+-k_1&amp;-k_2
+\end{bmatrix}x+
+\begin{bmatrix}
+\gamma k_r\\
+k_r
+\end{bmatrix}r,
+\]</div>
+<div class="math-block">\[
+y=Cx+Du=
+\begin{bmatrix}
+1&amp;0
+\end{bmatrix}x.
+\tag{6.14}
+\]</div>
+<p>闭环系统特征多项式为</p>
+<div class="math-block">\[
+\det(sI-A+BK)
+=
+\det
+\begin{bmatrix}
+s+\gamma k_1&amp;\gamma k_2-1\\
+k_1&amp;s+k_2
+\end{bmatrix}
+=s^2+(\gamma k_1+k_2)s+k_1.
+\]</div>
+<p>假设希望用反馈把系统动态设计为具有特征多项式</p>
+<div class="math-block">\[
+p(s)=s^2+2\zeta_c\omega_cs+\omega_c^2.
+\]</div>
+<p>比较这个多项式和闭环系统特征多项式，可得反馈增益应选为</p>
+<div class="math-block">\[
+k_1=\omega_c^2,\qquad
+k_2=2\zeta_c\omega_c-\gamma\omega_c^2.
+\]</div>
+<p>式 (6.13) 给出 \(k_r=k_1=\omega_c^2\)，控制律可写为</p>
+<div class="math-block">\[
+u=k_1(r-x_1)-k_2x_2
+=\omega_c^2(r-x_1)
+-\left(2\zeta_c\omega_c-\gamma\omega_c^2\right)x_2.
+\]</div>
+<p>图 6.6 显示了不同设计参数下闭环系统的阶跃响应。图 6.6a 显示 \(\omega_c\) 的影响：\(\omega_c\) 增大时响应速度提高。\(\omega_c=0.5\) 和 1 时响应具有合理超调量。对 \(\omega_c=0.5\)，调节时间约为 15 个车长，超出图中范围；对 \(\omega_c=1\)，调节时间降至约 6 个车长。控制信号 \(\delta\) 初始较大，随后随时间趋于零，因为闭环动态中含有积分器。控制信号初值为 \(k_r=\omega_c^2r\)，因此可实现的响应时间受执行器可用信号大小限制。特别要注意，当 \(\omega_c\) 从 1 变为 2 时，控制信号会显著增大。图 6.6b 显示 \(\zeta_c\) 的影响：阻尼减小时，响应速度和超调量都会增加。从这些图可以看出，合理设计参数大致是 \(\omega_c\) 位于 0.5 到 1 的范围，并且 \(\zeta_c\ge0.7\)。</p>
+<figure class="figure-block"><img alt="图 6.6" loading="lazy" src="../assets/figures/chapter-06/fig-6-6.png"/><figcaption>图 6.6：转向系统的状态反馈控制。图 (a) 中控制器取 \(\zeta_c=0.7\)，\(\omega_c=0.5,1,2\) rad/s。响应速度随 \(\omega_c\) 增大而增加，但较大的 \(\omega_c\) 也会带来较大的初始控制动作。图 (b) 中 \(\omega_c=1\)，\(\zeta_c=0.5,0.7,1\)。</figcaption></figure>
+<p>车辆转向系统这个例子说明，状态反馈可以用来把闭环系统特征值设置为任意给定值。</p>
+<h3 id="可达标准形系统的状态反馈">可达标准形系统的状态反馈</h3>
+<p>可达标准形的一个性质是，系统参数就是特征多项式的系数。因此，在求解特征值配置问题时，考虑这种形式的系统很自然。</p>
+<p>考虑一个处于可达标准形的系统：</p>
+<div class="math-block">\[
+\frac{dz}{dt}=\tilde Az+\tilde Bu
+=
+\begin{bmatrix}
+-a_1&amp;-a_2&amp;-a_3&amp;\cdots&amp;-a_n\\
+1&amp;0&amp;0&amp;\cdots&amp;0\\
+0&amp;1&amp;0&amp;\cdots&amp;0\\
+\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;\cdots&amp;1&amp;0
+\end{bmatrix}z+
+\begin{bmatrix}
+1\\
+0\\
+\vdots\\
+0
+\end{bmatrix}u,
+\]</div>
+<div class="math-block">\[
+y=\tilde Cz=
+\begin{bmatrix}
+b_1&amp;b_2&amp;\cdots&amp;b_n
+\end{bmatrix}z.
+\tag{6.15}
+\]</div>
+<p>由式 (6.7) 可知，开环系统特征多项式为</p>
+<div class="math-block">\[
+\det(sI-A)=s^n+a_1s^{n-1}+\cdots+a_{n-1}s+a_n.
+\]</div>
+<p>在正式分析之前，可以先看图 6.4 的系统框图来获得直观理解。特征多项式由图中的参数 \(a_k\) 给出。注意，通过把状态 \(z_k\) 反馈到输入 \(u\)，就可以改变参数 \(a_k\)。因此，用状态反馈改变特征多项式系数是直接的。</p>
+<p>回到方程，引入控制律</p>
+<div class="math-block">\[
+u=-\tilde Kz+k_rr
+=-\tilde k_1z_1-\tilde k_2z_2-\cdots-\tilde k_nz_n+k_rr.
+\tag{6.16}
+\]</div>
+<p>闭环系统变为</p>
+<div class="math-block">\[
+\frac{dz}{dt}=
+\begin{bmatrix}
+-a_1-\tilde k_1&amp;-a_2-\tilde k_2&amp;\cdots&amp;-a_n-\tilde k_n\\
+1&amp;0&amp;\cdots&amp;0\\
+0&amp;1&amp;\cdots&amp;0\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;\cdots&amp;1&amp;0
+\end{bmatrix}z+
+\begin{bmatrix}
+k_r\\
+0\\
+\vdots\\
+0
+\end{bmatrix}r,
+\]</div>
+<div class="math-block">\[
+y=\begin{bmatrix}b_1&amp;b_2&amp;\cdots&amp;b_n\end{bmatrix}z.
+\tag{6.17}
+\]</div>
+<p>反馈改变了 \(A\) 矩阵第一行的元素，而这些元素正对应特征多项式中的参数。闭环系统因此具有特征多项式</p>
+<div class="math-block">\[
+s^n+(a_1+\tilde k_1)s^{n-1}
++(a_2+\tilde k_2)s^{n-2}
++\cdots
++(a_{n-1}+\tilde k_{n-1})s
++a_n+\tilde k_n.
+\]</div>
+<p>要求这个多项式等于期望闭环多项式</p>
+<div class="math-block">\[
+p(s)=s^n+p_1s^{n-1}+\cdots+p_{n-1}s+p_n,
+\]</div>
+<p>可得控制器增益应选为</p>
+<div class="math-block">\[
+\tilde k_1=p_1-a_1,\qquad
+\tilde k_2=p_2-a_2,\qquad
+\ldots,\qquad
+\tilde k_n=p_n-a_n.
+\]</div>
+<p>这个反馈只是把系统 (6.17) 中的参数 \(a_i\) 替换为 \(p_i\)。因此，可达标准形系统的反馈增益为</p>
+<div class="math-block">\[
+\tilde K=
+\begin{bmatrix}
+p_1-a_1&amp;p_2-a_2&amp;\cdots&amp;p_n-a_n
+\end{bmatrix}.
+\tag{6.18}
+\]</div>
+<p>若要使零频增益等于 1，参数 \(k_r\) 应选择为</p>
+<div class="math-block">\[
+k_r=\frac{a_n+\tilde k_n}{b_n}=\frac{p_n}{b_n}.
+\tag{6.19}
+\]</div>
+<p>注意，为得到正确的零频增益，必须精确知道参数 \(a_n\) 和 \(b_n\)。因此，零频增益是通过精确标定得到的。这与后面将看到的积分作用很不一样，后者可以通过积分反馈获得正确稳态值。</p>
+<h3 id="特征值配置">特征值配置</h3>
+<p>前面的例子已经说明，反馈可以通过配置特征值来设计系统动态。要在一般情形下解决这个问题，只需改变坐标，使系统处于可达标准形。考虑系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu,\qquad y=Cx+Du.
+\tag{6.20}
+\]</div>
+<p>可以通过线性变换 \(z=Tx\) 改变坐标，使变换后的系统处于可达标准形 (6.15)。对这样的系统，反馈由式 (6.16) 给出，系数由式 (6.18) 给出。再变换回原坐标，得到反馈</p>
+<div class="math-block">\[
+u=-\tilde Kz+k_rr=-\tilde KTx+k_rr.
+\]</div>
+<p>所得结果可概括为下面定理。</p>
+<p><strong>定理 6.3 通过状态反馈配置特征值</strong> 考虑式 (6.20) 给出的单输入单输出系统。令</p>
+<div class="math-block">\[
+\lambda(s)=s^n+a_1s^{n-1}+\cdots+a_{n-1}s+a_n
+\]</div>
+<p>为 \(A\) 的特征多项式。如果系统可达，则存在反馈</p>
+<div class="math-block">\[
+u=-Kx+k_rr,
+\]</div>
+<p>使闭环系统具有特征多项式</p>
+<div class="math-block">\[
+p(s)=s^n+p_1s^{n-1}+\cdots+p_{n-1}s+p_n.
+\]</div>
+<p>反馈增益可写为</p>
+<div class="math-block">\[
+K=\tilde KT
+=
+\begin{bmatrix}
+p_1-a_1&amp;p_2-a_2&amp;\cdots&amp;p_n-a_n
+\end{bmatrix}\tilde W_rW_r^{-1},
+\tag{6.21}
+\]</div>
+<p>其中 \(W_r=\begin{bmatrix}B&amp;AB&amp;\cdots&amp;A^{n-1}B\end{bmatrix}\)，\(\tilde W_r\) 是可达标准形系统的可达性矩阵。参考增益 \(k_r\) 由期望的零频增益确定，常用形式为式 (6.13)；在可达标准形且 \(D=0\) 时，可用式 (6.19)。</p>
+<p>对简单问题，可以把 \(K\) 的元素 \(k_i\) 当成未知量来解特征值配置问题。先计算特征多项式</p>
+<div class="math-block">\[
+\lambda(s)=\det(sI-A+BK),
+\]</div>
+<p>再把同次幂 \(s\) 的系数与期望特征多项式</p>
+<div class="math-block">\[
+p(s)=s^n+p_1s^{n-1}+\cdots+p_{n-1}s+p_n
+\]</div>
+<p>中的系数相等。这样得到一组关于 \(k_i\) 的线性方程。如果系统可达，这组方程总能求解，例 6.4 中正是这样做的。</p>
+<p>式 (6.21) 称为 Ackermann 公式 <sup class="citation">[<a href="bibliography.html#ref-3">3</a>, <a href="bibliography.html#ref-4">4</a>]</sup>，可以用于数值计算。它在 MATLAB 函数 <code>acker</code> 中实现。对高阶系统，MATLAB 函数 <code>place</code> 更可取，因为它数值条件更好。</p>
+<h3 id="例-6.5-捕食者猎物">例 6.5 捕食者猎物</h3>
+<p>考虑通过调节食物供应来调控生态系统种群的问题。使用第 3.7 节引入的捕食者猎物模型。系统动态为</p>
+<div class="math-block">\[
+\frac{dH}{dt}
+=(r+u)H\left(1-\frac{H}{k}\right)
+-\frac{aHL}{c+H},\qquad H\ge0,
+\]</div>
+<div class="math-block">\[
+\frac{dL}{dt}
+=\frac{baHL}{c+H}-dL,\qquad L\ge0.
+\]</div>
+<p>选择下面标称参数，它们与前面仿真中使用的值一致：</p>
+<div class="math-block">\[
+a=3.2,\qquad b=0.6,\qquad c=50,
+\]</div>
+<div class="math-block">\[
+d=0.56,\qquad k=125,\qquad r=1.6.
+\]</div>
+<p>把参数 \(r\)，也就是野兔增长率，作为系统输入。实际中可以通过控制野兔的食物来源来调节它。模型中第一条方程的 \((r+u)\) 项反映了这一点。选择猞猁数量作为系统输出。</p>
+<p>为控制系统，先在平衡点 \((H_e,L_e)\) 附近线性化。数值上得到</p>
+<div class="math-block">\[
+x_e\approx(20.6,29.5).
+\]</div>
+<p>这给出线性动态系统</p>
+<div class="math-block">\[
+\frac{d}{dt}
+\begin{bmatrix}
+z_1\\
+z_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.13&amp;-0.93\\
+0.57&amp;0
+\end{bmatrix}
+\begin{bmatrix}
+z_1\\
+z_2
+\end{bmatrix}
++
+\begin{bmatrix}
+17.2\\
+0
+\end{bmatrix}v,
+\qquad
+w=
+\begin{bmatrix}
+0&amp;1
+\end{bmatrix}
+\begin{bmatrix}
+z_1\\
+z_2
+\end{bmatrix},
+\]</div>
+<p>其中 \(z_1=H-H_e\)、\(z_2=L-L_e\)、\(v=u\)。容易检查，系统在平衡点 \((z,v)=(0,0)\) 附近可达，因此可以用状态反馈配置系统特征值。</p>
+<p>闭环特征值的选择需要在输入调节能力与系统自然动态之间作权衡。这可以通过试错完成，也可以使用本书后面讨论的更系统的方法。这里先简单地选择期望闭环特征值</p>
+<div class="math-block">\[
+\lambda=\{-0.1,-0.2\}.
+\]</div>
+<p>用前面描述的方法求解反馈增益，得到</p>
+<div class="math-block">\[
+K=
+\begin{bmatrix}
+0.025&amp;-0.052
+\end{bmatrix}.
+\]</div>
+<p>最后利用式 (6.13) 求参考增益，得到</p>
+<div class="math-block">\[
+k_r=0.002.
+\]</div>
+<p>合在一起，控制律为</p>
+<div class="math-block">\[
+v=-Kz+k_rr.
+\]</div>
+<p>为了实现这个控制律，必须用原坐标重写：</p>
+<div class="math-block">\[
+u=u_e-K(x-x_e)+k_r(r-y_e)
+\]</div>
+<div class="math-block">\[
+=-
+\begin{bmatrix}
+0.025&amp;-0.052
+\end{bmatrix}
+\begin{bmatrix}
+H-20.6\\
+L-29.5
+\end{bmatrix}
++0.002(r-29.5).
+\]</div>
+<p>这条规则告诉我们，应当怎样根据生态系统中当前野兔和猞猁数量调节增长率。图 6.7a 显示了所得闭环系统的仿真，参数取上面给出的值，初始种群为 15 只野兔和 20 只猞猁。可以看到，系统很快把猞猁种群稳定到参考值附近。图 6.7b 给出了系统相图，显示其他初始条件如何收敛到被稳定的平衡种群。注意，这些动态与自然动态非常不同，后者见图 3.20。</p>
+<figure class="figure-block"><img alt="图 6.7" loading="lazy" src="../assets/figures/chapter-06/fig-6-7.png"/><figcaption>图 6.7：受控捕食者猎物系统的仿真结果。图 (a) 显示猞猁和野兔种群随时间变化；图 (b) 显示受控系统的相图。反馈用于把种群稳定在指定平衡点附近。</figcaption></figure>
+<p>本节结果表明，在能够测量所有状态这一很强假设下，可以用状态反馈设计系统动态。下一章讨论输出反馈和状态估计时，会处理状态是否可得的问题。另外，定理 6.3 声称特征值可放置在任意位置，这同样高度理想化，并假设过程动态已被高精度掌握。状态反馈结合状态估计器后的鲁棒性将在第 12 章讨论，届时我们已经具备所需工具。</p>
+<h2 id="6.3-状态反馈设计">6.3 状态反馈设计</h2>
+<p>特征值位置决定闭环动态行为，因此把特征值放在哪里是主要设计决策。和所有反馈设计问题一样，控制输入大小、系统对扰动的鲁棒性以及闭环性能之间存在权衡。本节从二阶系统这个特殊情形开始，考察其中一些权衡。</p>
+<h3 id="二阶系统">二阶系统</h3>
+<p>二阶线性微分方程在反馈系统分析和设计中非常常见。正因为它们无处不在，把本章概念应用到这类系统上，并建立稳定性与性能之间关系的直观认识，是很有用的。</p>
+<p>标准二阶系统是下面形式的微分方程：</p>
+<div class="math-block">\[
+\ddot q+2\zeta\omega_0\dot q+\omega_0^2q=k\omega_0^2u,\qquad y=q.
+\tag{6.22}
+\]</div>
+<p>写成状态空间形式，这个系统可表示为</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+0&amp;\omega_0\\
+-\omega_0&amp;-2\zeta\omega_0
+\end{bmatrix}x+
+\begin{bmatrix}
+0\\
+k\omega_0
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+1&amp;0
+\end{bmatrix}x.
+\tag{6.23}
+\]</div>
+<p>系统特征值为</p>
+<div class="math-block">\[
+\lambda=-\zeta\omega_0\pm\omega_0\sqrt{\zeta^2-1}.
+\]</div>
+<p>因此，当 \(\omega_0&gt;0\) 且 \(\zeta&gt;0\) 时，原点是稳定平衡点。注意，如果 \(\zeta&lt;1\)，特征值为复数；否则为实数。式 (6.22) 和式 (6.23) 可描述许多二阶系统，包括带阻尼振子、有源滤波器和柔性结构，下面的例子会看到。</p>
+<p>解的形式取决于 \(\zeta\) 的值，\(\zeta\) 称为系统阻尼比。如果 \(\zeta&gt;1\)，称系统为过阻尼，系统自然响应 \(u=0\) 是两个衰减指数项之和：</p>
+<div class="math-block">\[
+y(t)=c_1e^{-\alpha t}+c_2e^{-\beta t},
+\]</div>
+<p>其中</p>
+<div class="math-block">\[
+\alpha=\omega_0(\zeta+\sqrt{\zeta^2-1}),\qquad
+\beta=\omega_0(\zeta-\sqrt{\zeta^2-1}),
+\]</div>
+<p>常数 \(c_1,c_2\) 由初始条件决定。如果 \(\zeta=1\)，称系统为临界阻尼，解变为</p>
+<div class="math-block">\[
+y(t)=e^{-\omega_0t}\bigl(x_{10}+(x_{20}+\omega_0x_{10})t\bigr).
+\]</div>
+<p>只要 \(\omega_0&gt;0\)，这个解仍然渐近稳定，虽然括号中的第二项随时间增长，但它乘上的指数项衰减得更快。</p>
+<p>最后，如果 \(0&lt;\zeta&lt;1\)，解为振荡形式，式 (6.22) 称为欠阻尼系统。参数 \(\omega_0\) 称为系统固有频率，因为当 \(\zeta\) 很小时，系统特征值近似为</p>
+<div class="math-block">\[
+\lambda=-\zeta\omega_0\pm j\omega_0.
+\]</div>
+<p>系统自然响应为</p>
+<div class="math-block">\[
+y(t)=e^{-\zeta\omega_0t}
+\left(
+x_{10}\cos\omega_dt+
+\left(\frac{\zeta\omega_0}{\omega_d}x_{10}
++\frac{1}{\omega_d}x_{20}\right)
+\sin\omega_dt
+\right),
+\]</div>
+<p>其中</p>
+<div class="math-block">\[
+\omega_d=\omega_0\sqrt{1-\zeta^2}
+\]</div>
+<p>称为阻尼频率。当 \(\zeta\ll1\) 时，\(\omega_d\approx\omega_0\) 给出解的振荡频率，而 \(\zeta\) 给出相对于 \(\omega_0\) 的阻尼率。</p>
+<p>由于二阶系统形式简单，可以解析求出阶跃响应和频率响应。阶跃响应的解取决于 \(\zeta\) 的大小。取 \(x(0)=0\)，有</p>
+<div class="math-block">\[
+y(t)=k\left(
+1-e^{-\zeta\omega_0t}
+\left(
+\cos\omega_dt+
+\frac{\zeta}{\sqrt{1-\zeta^2}}\sin\omega_dt
+\right)
+\right),
+\qquad \zeta&lt;1;
+\]</div>
+<div class="math-block">\[
+y(t)=k\left(1-e^{-\omega_0t}(1+\omega_0t)\right),
+\qquad \zeta=1;
+\]</div>
+<div class="math-block">\[
+y(t)=k\left[
+1-\frac{1}{2\sqrt{\zeta^2-1}}
+\left(
+(\zeta+\sqrt{\zeta^2-1})e^{-\omega_0(\zeta-\sqrt{\zeta^2-1})t}
+-(\zeta-\sqrt{\zeta^2-1})e^{-\omega_0(\zeta+\sqrt{\zeta^2-1})t}
+\right)
+\right],
+\qquad \zeta&gt;1.
+\tag{6.24}
+\]</div>
+<p>注意，在轻阻尼情形 \(\zeta&lt;1\) 下，解以频率 \(\omega_d\) 振荡。</p>
+<p>图 6.8 显示了 \(k=1\) 且不同 \(\zeta\) 取值下系统的阶跃响应。响应形状由 \(\zeta\) 决定，响应速度由 \(\omega_0\) 决定，图中已经通过时间轴缩放体现出来：\(\omega_0\) 越大，响应越快。</p>
+<figure class="figure-block"><img alt="图 6.8" loading="lazy" src="../assets/figures/chapter-06/fig-6-8.png"/><figcaption>图 6.8：二阶系统的阶跃响应。图 (a) 显示特征值随阻尼比变化；图 (b) 显示系统 (6.23) 在不同 \(\zeta\) 下的归一化阶跃响应。阻尼比增大时，系统上升时间变长，但超调减少。横轴采用缩放时间 \(\omega_0t\)，较大的 \(\omega_0\) 会带来更快响应。</figcaption></figure>
+<p>除了显式解，还可以计算第 5.3 节定义的阶跃响应性质。以欠阻尼系统最大超调量为例，把输出重写为</p>
+<div class="math-block">\[
+y(t)=k\left(
+1-\frac{1}{\sqrt{1-\zeta^2}}
+e^{-\zeta\omega_0t}
+\sin(\omega_dt+\psi)
+\right),
+\tag{6.25}
+\]</div>
+<p>其中 \(\psi=\arccos\zeta\)。最大超调量发生在 \(y\) 的导数第一次为零时，可以证明</p>
+<div class="math-block">\[
+M_p=e^{-\pi\zeta/\sqrt{1-\zeta^2}}.
+\]</div>
+<p>阶跃响应其他特征也可以类似计算。表 6.1 概括了这些结果。</p>
+<p class="table-caption">表 6.1：\(0&lt;\zeta&lt;1\) 的二阶系统阶跃响应性质。</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th align="right">表达式或近似</th>
+<th align="right">\(\zeta=0.5\)</th>
+<th align="right">\(\zeta=1/\sqrt2\)</th>
+<th align="right">\(\zeta=1\)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>稳态值</td>
+<td align="right">\(k\)</td>
+<td align="right">\(k\)</td>
+<td align="right">\(k\)</td>
+<td align="right">\(k\)</td>
+</tr>
+<tr>
+<td>上升时间</td>
+<td align="right">由 10% 到 90% 计算</td>
+<td align="right">\(1.8/\omega_0\)</td>
+<td align="right">\(2.2/\omega_0\)</td>
+<td align="right">\(2.7/\omega_0\)</td>
+</tr>
+<tr>
+<td>超调量</td>
+<td align="right">\(e^{-\pi\zeta/\sqrt{1-\zeta^2}}\)</td>
+<td align="right">16%</td>
+<td align="right">4%</td>
+<td align="right">0%</td>
+</tr>
+<tr>
+<td>调节时间，2%</td>
+<td align="right">约 \(4/(\zeta\omega_0)\)</td>
+<td align="right">\(8.0/\omega_0\)</td>
+<td align="right">\(5.9/\omega_0\)</td>
+<td align="right">\(5.8/\omega_0\)</td>
+</tr>
+</tbody></table>
+<p>二阶系统的频率响应也可以显式计算：</p>
+<div class="math-block">\[
+Me^{j\theta}
+=\frac{k\omega_0^2}{(i\omega)^2+2\zeta\omega_0(i\omega)+\omega_0^2}
+=\frac{k\omega_0^2}{\omega_0^2-\omega^2+2i\zeta\omega_0\omega}.
+\]</div>
+<p>图 6.9 给出了频率响应的图形说明。注意，阻尼比 \(\zeta\) 越小，谐振峰越大。这个峰常用 \(Q\) 值刻画，定义为</p>
+<div class="math-block">\[
+Q=\frac{1}{2\zeta}.
+\]</div>
+<p>二阶系统频率响应性质概括在表 6.2 中。</p>
+<figure class="figure-block"><img alt="图 6.9" loading="lazy" src="../assets/figures/chapter-06/fig-6-9.png"/><figcaption>图 6.9：二阶系统 (6.23) 的频率响应。图 (a) 显示特征值随 \(\zeta\) 变化；图 (b) 显示频率响应随 \(\zeta\) 变化。上方曲线为增益比 \(M\)，下方曲线为相移 \(\theta\)。当 \(\zeta\) 很小时，频率响应幅值在 \(\omega=\omega_0\) 附近有很高峰值，相位也在这里快速变化；随着 \(\zeta\) 增大，峰值降低，相位从 \(0^\circ\) 到 \(-180^\circ\) 的变化更平滑。</figcaption></figure>
+<p class="table-caption">表 6.2：\(0&lt;\zeta&lt;1\) 的二阶系统频率响应性质。</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th align="right">表达式</th>
+<th align="right">\(\zeta=0.1\)</th>
+<th align="right">\(\zeta=0.5\)</th>
+<th align="right">\(\zeta=1/\sqrt2\)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>零频增益</td>
+<td align="right">\(M_0=k\)</td>
+<td align="right">\(k\)</td>
+<td align="right">\(k\)</td>
+<td align="right">\(k\)</td>
+</tr>
+<tr>
+<td>带宽</td>
+<td align="right">\(\omega_b=\omega_0\sqrt{1-2\zeta^2+\sqrt{4\zeta^4-4\zeta^2+2}}\)</td>
+<td align="right">\(1.54\omega_0\)</td>
+<td align="right">\(1.27\omega_0\)</td>
+<td align="right">\(\omega_0\)</td>
+</tr>
+<tr>
+<td>谐振峰值</td>
+<td align="right">\(M_r=\dfrac{k}{2\zeta\sqrt{1-\zeta^2}}\)</td>
+<td align="right">\(5.03k\)</td>
+<td align="right">\(1.15k\)</td>
+<td align="right">\(k\)</td>
+</tr>
+<tr>
+<td>谐振频率</td>
+<td align="right">\(\omega_{mr}=\omega_0\sqrt{1-2\zeta^2}\)</td>
+<td align="right">\(0.99\omega_0\)</td>
+<td align="right">\(0.707\omega_0\)</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+<h3 id="例-6.6-药物给药">例 6.6 药物给药</h3>
+<p>为说明这些公式的用法，考虑第 3.6 节描述的双隔室药物给药模型。系统动态为</p>
+<div class="math-block">\[
+\frac{dc}{dt}=
+\begin{bmatrix}
+-(k_0+k_1)&amp;k_1\\
+k_2&amp;-k_2
+\end{bmatrix}c+
+\begin{bmatrix}
+b_0\\
+0
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+0&amp;1
+\end{bmatrix}c.
+\]</div>
+<p>其中 \(c_1,c_2\) 是两个隔室中的药物浓度，\(k_i\)、\(i=0,\ldots,2\) 以及 \(b_0\) 是系统参数，\(u\) 是进入隔室 1 的药物流速，\(y\) 是隔室 2 中药物浓度。假设可以测量每个隔室中的药物浓度，并希望设计反馈律，使输出维持在给定参考值 \(r\)。</p>
+<p>选择 \(\zeta=0.9\) 来减小超调，并选取上升时间 \(T_r=10\) min。使用表 6.1 中公式，得到 \(\omega_0=0.22\)。现在可以计算把特征值放置到该位置所需的增益。令</p>
+<div class="math-block">\[
+u=-Kx+k_rr,
+\]</div>
+<p>系统闭环特征值满足</p>
+<div class="math-block">\[
+\lambda(s)=-0.198\pm0.0959i.
+\]</div>
+<p>选择</p>
+<div class="math-block">\[
+k_1=-0.2027,\qquad k_2=0.2005
+\]</div>
+<p>即可得到期望闭环行为。式 (6.13) 给出参考增益</p>
+<div class="math-block">\[
+k_r=0.0645.
+\]</div>
+<p>控制器响应如图 6.10 所示，并与周期性给药的开环策略进行比较。</p>
+<figure class="figure-block"><img alt="图 6.10" loading="lazy" src="../assets/figures/chapter-06/fig-6-10.png"/><figcaption>图 6.10：开环与闭环药物给药比较。图中比较了用一系列剂量给药，与连续监测浓度并连续调节剂量的方式。两种情形都能近似把浓度维持在期望水平，但闭环系统中的药物浓度变化显著更小。</figcaption></figure>
+<h3 id="高阶系统">高阶系统</h3>
+<p>到目前为止，讨论重点只放在二阶系统。对高阶系统，特征值配置要困难得多，特别是当反馈设计中存在许多权衡时。</p>
+<p>二阶系统在反馈系统中之所以如此重要，还有一个原因：即使对更复杂的系统，响应也常常由主导特征值刻画。为更精确地定义它们，考虑具有特征值 \(\lambda_j\)、\(j=1,\ldots,n\) 的系统。对复特征值 \(\lambda\)，定义阻尼比为</p>
+<div class="math-block">\[
+\zeta=-\frac{\operatorname{Re}\lambda}{|\lambda|}.
+\]</div>
+<p>如果一对共轭复特征值 \(\lambda,\bar\lambda\) 与系统所有其他特征值相比具有最小阻尼比，就称它们为主导特征值对。</p>
+<p>假设系统稳定，主导特征值对往往是响应中最重要的部分。为了说明这一点，设系统处于若尔当形，并且有一个简单若尔当块对应主导特征值对：</p>
+<div class="math-block">\[
+\frac{dz}{dt}=
+\begin{bmatrix}
+\lambda\\
+&amp;\bar\lambda\\
+&amp;&amp;J_2\\
+&amp;&amp;&amp;\ddots\\
+&amp;&amp;&amp;&amp;J_k
+\end{bmatrix}z+Bu,
+\qquad
+y=Cz.
+\]</div>
+<p>注意，由于若尔当变换，状态 \(z\) 可能是复数。系统响应是各个若尔当子系统响应的线性组合。从图 6.8 可以看到，当 \(\zeta&lt;1\) 时，响应最慢的子系统正是阻尼比最小的子系统。因此，当把各个子系统响应相加后，其他解项造成的初始暂态消失以后，主导特征值对通常成为主要因素。这个简单分析并非总是成立，例如某些非主导项可能因为系统具体形式而具有更大系数，但在许多情况下，主导特征值确实决定了系统阶跃响应。</p>
+<p>特征值配置的唯一形式要求是系统可达。实践中还有许多其他约束，因为特征值的选择会强烈影响控制信号的大小和变化率。大的特征值通常需要大的控制信号，以及信号的快速变化。因此，执行器能力会限制闭环特征值可能的位置。这些问题将在第 11 章和第 12 章深入讨论。</p>
+<p>下面以平衡系统为例说明一些主要思想。</p>
+<h3 id="例-6.7-平衡系统">例 6.7 平衡系统</h3>
+<p>考虑稳定平衡系统的问题，其动态见例 6.2。系统动态为</p>
+<div class="math-block">\[
+A=
+\begin{bmatrix}
+0&amp;0&amp;1&amp;0\\
+0&amp;0&amp;0&amp;1\\
+0&amp;m^2l^2g/\mu&amp;-cJ_t/\mu&amp;-\gamma lm/\mu\\
+0&amp;M_tmgl/\mu&amp;-clm/\mu&amp;-\gamma M_t/\mu
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+0\\
+0\\
+J_t/\mu\\
+lm/\mu
+\end{bmatrix},
+\]</div>
+<p>其中 \(M_t=M+m\)、\(J_t=J+ml^2\)、\(\mu=M_tJ_t-m^2l^2\)，并且这里保留 \(c\) 和 \(\gamma\) 为非零。使用下面参数，它们大致对应一个人站在稳定小车上的情形：</p>
+<div class="math-block">\[
+M=10\ \mathrm{kg},\qquad
+m=80\ \mathrm{kg},\qquad
+c=0.1\ \mathrm{N\,s/m},
+\]</div>
+<div class="math-block">\[
+J=100\ \mathrm{kg\,m^2/s^2},\qquad
+l=1\ \mathrm{m},\qquad
+\gamma=0.01\ \mathrm{N\,m\,s},\qquad
+g=9.8\ \mathrm{m/s^2}.
+\]</div>
+<p>开环动态有一个不稳定模态。例 6.2 已经验证该系统可达，因此可以使用状态反馈稳定系统，并给出期望性能水平。</p>
+<p>为了决定闭环特征值应放在哪里，注意闭环动态大致由两部分组成：一组较快动态用于把摆稳定在倒立位置，另一组较慢动态用于控制小车位置。对快动态，可以参考摆在下垂位置的自然周期，</p>
+<div class="math-block">\[
+\omega_0=\sqrt{\frac{mgl}{J+ml^2}}\approx2.1\ \mathrm{rad/s}.
+\]</div>
+<p>为得到快速响应，选择阻尼比 \(\zeta=0.5\)，并尝试把第一对特征值放在</p>
+<div class="math-block">\[
+\lambda_{1,2}\approx-\zeta\omega_0\pm i\omega_0\approx-1\pm2i,
+\]</div>
+<p>这里使用了 \(\sqrt{1-\zeta^2}\approx1\) 的近似。对慢动态，选择阻尼比 0.7 以获得较小超调，并选择固有频率 0.5，使上升时间约为 5 s。这给出特征值</p>
+<div class="math-block">\[
+\lambda_{3,4}=-0.35\pm0.35i.
+\]</div>
+<p>控制器由状态反馈和参考输入的前馈增益组成。反馈增益可以用定理 6.3 或 MATLAB 的 <code>place</code> 命令计算。所得控制器应用于线性化系统的阶跃响应见图 6.11a。虽然阶跃响应的形状看起来符合期望，但所需输入非常大，峰值几乎是重力的三倍。</p>
+<p>为了得到更现实的响应，可以重新设计控制器，让动态变慢。可以看到，输入力峰值出现在较快时间尺度上，因此把这部分动态放慢 3 倍，同时保持阻尼比不变。第二组特征值也放慢，直觉上，小车位置应比摆的稳定化运动得更慢。慢动态阻尼比仍取 0.7，把频率改为 0.25，对应约 10 s 的上升时间，期望特征值变为</p>
+<div class="math-block">\[
+\lambda=\{-0.33\pm0.66i,\ -0.18\pm0.18i\}.
+\]</div>
+<p>所得控制器性能见图 6.11b。</p>
+<figure class="figure-block"><img alt="图 6.11" loading="lazy" src="../assets/figures/chapter-06/fig-6-11.png"/><figcaption>图 6.11：平衡系统的状态反馈控制。图 (a) 显示为快速性能设计的控制器阶跃响应。虽然响应特性看起来很好，但输入幅值非常大。图 (b) 显示较温和的控制器，响应时间变慢，但输入幅值更加合理。两个阶跃响应都作用在线性化动态上。</figcaption></figure>
+<p>这个例子表明，仅靠状态反馈决定特征值位置可能很困难，尤其对高维系统更是如此。这是该方法的主要局限之一。下一节讨论的线性二次调节器这类最优控制技术，是一种可用方法。也可以关注频率响应来进行设计，这是第 8 章到第 12 章的主题。</p>
+<h3 id="线性二次调节器">线性二次调节器</h3>
+<p>除了直接选择闭环特征值位置来达成某个目标，也可以通过优化代价函数来选择状态反馈控制器增益。当需要在系统性能与实现这种性能所需的输入大小之间取得平衡时，这尤其有用。</p>
+<p>无限时域线性二次调节器，简称 LQR，是最常见的最优控制问题之一。给定多输入线性系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu,\qquad x\in\mathbb{R}^n,\ u\in\mathbb{R}^p,
+\]</div>
+<p>希望最小化二次代价函数</p>
+<div class="math-block">\[
+\tilde J=\int_0^\infty
+\left(x^TQ_xx+u^TQ_uu\right)dt,
+\tag{6.26}
+\]</div>
+<p>其中 \(Q_x\ge0\)、\(Q_u&gt;0\) 是适当维数的对称正半定或正定矩阵。这个代价函数表示状态离原点的距离与控制输入代价之间的权衡。通过选择矩阵 \(Q_x\) 和 \(Q_u\)，可以平衡解的收敛速度和控制代价。</p>
+<p>LQR 问题的解由如下线性控制律给出：</p>
+<div class="math-block">\[
+u=-Q_u^{-1}B^TPx,
+\]</div>
+<p>其中 \(P\in\mathbb{R}^{n\times n}\) 是正定对称矩阵，满足</p>
+<div class="math-block">\[
+PA+A^TP-PBQ_u^{-1}B^TP+Q_x=0.
+\tag{6.27}
+\]</div>
+<p>式 (6.27) 称为代数 Riccati 方程，可以数值求解，例如使用 MATLAB 的 <code>lqr</code> 命令。</p>
+<p>LQR 设计的一个关键问题是怎样选择权重 \(Q_x\) 和 \(Q_u\)。为了保证解存在，必须有 \(Q_x\ge0\)、\(Q_u&gt;0\)。此外，\(Q_x\) 还需要满足某些可观性条件，这会限制它的选择。这里假设 \(Q_x&gt;0\)，以确保代数 Riccati 方程总有解。</p>
+<p>要为代价函数权重 \(Q_x,Q_u\) 选择具体数值，就必须利用对所控制系统的了解。一个特别简单的选择是使用对角权重：</p>
+<div class="math-block">\[
+Q_x=
+\begin{bmatrix}
+q_1&amp;0&amp;\cdots&amp;0\\
+0&amp;q_2&amp;\cdots&amp;0\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;\cdots&amp;q_n
+\end{bmatrix},
+\qquad
+Q_u=
+\begin{bmatrix}
+\rho_1&amp;0&amp;\cdots&amp;0\\
+0&amp;\rho_2&amp;\cdots&amp;0\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;\cdots&amp;\rho_p
+\end{bmatrix}.
+\]</div>
+<p>在这种选择下，各个对角元素描述每个状态和输入的平方应当对总代价贡献多少。因此，希望保持较小的状态可以赋予较大权重。类似地，也可以通过选择对应输入权重 \(\rho\)，相对于状态和其他输入惩罚某个输入。</p>
+<h3 id="例-6.8-矢量推力飞机">例 6.8 矢量推力飞机</h3>
+<p>考虑系统 (2.26) 的原始动态，写成状态空间形式为</p>
+<div class="math-block">\[
+\frac{dz}{dt}=
+\begin{bmatrix}
+z_4\\
+z_5\\
+z_6\\
+-g\sin\theta-\dfrac{c}{m}z_4\\
+-g\cos\theta-\dfrac{c}{m}z_5\\
+0
+\end{bmatrix}
++
+\begin{bmatrix}
+0\\
+0\\
+0\\
+\dfrac{1}{m}\cos\theta\,F_1-\dfrac{1}{m}\sin\theta\,F_2\\
+\dfrac{1}{m}\sin\theta\,F_1+\dfrac{1}{m}\cos\theta\,F_2\\
+\dfrac{r}{J}F_1
+\end{bmatrix},
+\]</div>
+<p>见例 5.4。系统参数为</p>
+<div class="math-block">\[
+m=4\ \mathrm{kg},\qquad
+J=0.0475\ \mathrm{kg\,m^2},\qquad
+r=0.25\ \mathrm{m},
+\]</div>
+<div class="math-block">\[
+g=9.8\ \mathrm{m/s^2},\qquad
+c=0.05\ \mathrm{N\,s/m}.
+\]</div>
+<p>这些参数对应一个缩放后的系统模型。系统平衡点为 \(F_1=0\)、\(F_2=mg\)、\(z_e=(x_e,y_e,0,0,0,0)\)。为了推导平衡点附近的线性化模型，根据式 (5.34) 计算线性化：</p>
+<div class="math-block">\[
+A=
+\begin{bmatrix}
+0&amp;0&amp;0&amp;1&amp;0&amp;0\\
+0&amp;0&amp;0&amp;0&amp;1&amp;0\\
+0&amp;0&amp;0&amp;0&amp;0&amp;1\\
+0&amp;0&amp;-g&amp;-c/m&amp;0&amp;0\\
+0&amp;0&amp;0&amp;0&amp;-c/m&amp;0\\
+0&amp;0&amp;0&amp;0&amp;0&amp;0
+\end{bmatrix},
+\]</div>
+<div class="math-block">\[
+B=
+\begin{bmatrix}
+0&amp;0\\
+0&amp;0\\
+0&amp;0\\
+1/m&amp;0\\
+0&amp;1/m\\
+r/J&amp;0
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+1&amp;0&amp;0&amp;0&amp;0&amp;0\\
+0&amp;1&amp;0&amp;0&amp;0&amp;0
+\end{bmatrix},
+\qquad
+D=0.
+\]</div>
+<p>令 \(z=z-z_e\)、\(v=u-u_e\)，线性化系统为</p>
+<div class="math-block">\[
+\frac{dz}{dt}=Az+Bv,\qquad y=Cz.
+\]</div>
+<p>可以验证系统可达。</p>
+<p>为了为系统计算线性二次调节器，写出代价函数</p>
+<div class="math-block">\[
+J=\int_0^\infty(z^TQ_zz+v^TQ_vv)\,dt,
+\]</div>
+<p>其中 \(z=z-z_e\)、\(v=u-u_e\) 表示围绕期望平衡点 \((z_e,u_e)\) 的局部坐标。先为状态和输入代价选择对角矩阵：</p>
+<div class="math-block">\[
+Q_z=I,\qquad
+Q_v=
+\begin{bmatrix}
+\rho&amp;0\\
+0&amp;1
+\end{bmatrix}.
+\]</div>
+<p>这给出形如 \(v=-Kz\) 的控制律，再可写回原变量：</p>
+<div class="math-block">\[
+u=v+u_e=-K(z-z_e)+u_e.
+\]</div>
+<p>例 5.4 已经计算了平衡点，其中 \(u_e=(0,mg)\)、\(z_e=(x_e,y_e,0,0,0,0)\)。图 6.12a 显示控制器对期望位置阶跃变化的响应。通过调节 LQR 代价中的权重，可以调整响应。图 6.12b 显示不同输入权重 \(\rho\) 下 \(x\) 方向的响应。</p>
+<figure class="figure-block"><img alt="图 6.12" loading="lazy" src="../assets/figures/chapter-06/fig-6-12.png"/><figcaption>图 6.12：矢量推力飞机的阶跃响应。图 (a) 显示飞机被命令在 \(x\) 和 \(y\) 方向各移动 1 m 时的位置响应。图 (b) 显示控制权重 \(\rho=1,10^2,10^4\) 时的 \(x\) 方向运动。代价函数中输入项权重越高，响应越迟缓。</figcaption></figure>
+<p>线性二次调节器也可以为离散时间系统设计，下面例子说明这一点。</p>
+<h3 id="例-6.9-web-服务器控制">例 6.9 Web 服务器控制</h3>
+<p>考虑第 3.4 节给出的 Web 服务器例子，那里给出了系统的离散时间模型。我们希望设计一条控制律，设置服务器参数，使服务器平均处理器负载维持在期望水平。由于服务器上可能运行其他进程，Web 服务器必须根据负载变化调节参数。</p>
+<p>图 6.13 给出了控制系统框图。这里关注一个特殊情形：只用 <code>KeepAlive</code> 和 <code>MaxClients</code> 两个参数来控制处理器负载。还在测得负载中加入一个扰动，表示服务器上其他进程消耗的处理周期。系统基本结构与图 6.5 中的一般控制系统相同，只是扰动进入的位置在过程动态之后。</p>
+<figure class="figure-block"><img alt="图 6.13" loading="lazy" src="../assets/figures/chapter-06/fig-6-13.png"/><figcaption>图 6.13：Web 服务器反馈控制。控制器根据标称参数和当前负载之间的差异设置 Web 服务器参数。标称参数由 \(k_rr\) 决定。扰动 \(d\) 表示服务器上其他进程造成的负载。注意，测量发生在扰动之后，因此测得的是服务器总负载。</figcaption></figure>
+<p>系统动态由差分方程给出：</p>
+<div class="math-block">\[
+x[k+1]=Ax[k]+Bu[k],\qquad
+y_{\mathrm{cpu}}[k]=C_{\mathrm{cpu}}x[k]+d_{\mathrm{cpu}}[k],
+\]</div>
+<p>其中 \(x=(x_{\mathrm{cpu}},x_{\mathrm{mem}})\) 是状态，\(u=(u_{\mathrm{ka}},u_{\mathrm{mc}})\) 是输入，\(d_{\mathrm{cpu}}\) 是计算机上其他进程的处理负载，\(y_{\mathrm{cpu}}\) 是总处理器负载。选择状态反馈控制器</p>
+<div class="math-block">\[
+u=-K
+\begin{bmatrix}
+x_{\mathrm{cpu}}\\
+x_{\mathrm{mem}}
+\end{bmatrix}
++k_rr_{\mathrm{cpu}},
+\]</div>
+<p>其中 \(r_{\mathrm{cpu}}\) 是期望处理器负载。注意，这里用测得的处理器负载 \(y_{\mathrm{cpu}}\) 来保证系统根据实际负载调整运行状态。这个修改是必要的，因为扰动进入过程动态的方式并不标准。</p>
+<p>反馈增益矩阵 \(K\) 可以用本章描述的任意方法选择。这里使用线性二次调节器，代价函数权重为</p>
+<div class="math-block">\[
+Q_x=
+\begin{bmatrix}
+1&amp;0\\
+0&amp;0
+\end{bmatrix},
+\qquad
+Q_u=
+\begin{bmatrix}
+1/50^2&amp;0\\
+0&amp;1/1000^2
+\end{bmatrix}.
+\]</div>
+<p>状态代价 \(Q_x\) 的选择使我们更重视处理器负载而非内存使用。输入代价 \(Q_u\) 用来归一化两个输入，使 50 s 的 <code>KeepAlive</code> 超时和 1000 的 <code>MaxClients</code> 数值具有相同权重。由于输入代价为 \(u^TQ_uu\)，所以这些值要取平方。使用第 3.4 节的动态和 MATLAB 的 <code>dlqr</code> 命令，得到增益</p>
+<div class="math-block">\[
+K=
+\begin{bmatrix}
+-22.31&amp;0.1\\
+382.77&amp;7.7
+\end{bmatrix}.
+\]</div>
+<p>和连续时间控制系统一样，参考增益 \(k_r\) 需要选择为给出期望平衡点。令 \(x[k+1]=x[k]=x_e\)，给定参考输入 \(r\) 时的稳态平衡点与输出为</p>
+<div class="math-block">\[
+x_e=(A-BK)x_e+Bk_rr,\qquad y_e=Cx_e.
+\]</div>
+<p>这是关于 \(k_r\) 的矩阵方程，其中 \(k_r\) 是一个列向量，根据期望参考设置两个输入值。如果期望输出形式为 \(y_e=(r,0)\)，则需要求解</p>
+<div class="math-block">\[
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}
+=C(A-BK-I)^{-1}Bk_r.
+\]</div>
+<p>解得</p>
+<div class="math-block">\[
+k_r=
+\left(C(A-BK-I)^{-1}B\right)^{-1}
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}
+=
+\begin{bmatrix}
+9.3\\
+539.5
+\end{bmatrix}.
+\]</div>
+<p>闭环系统动态如图 6.14 所示。在 \(t=10\) s 时施加负载变化 \(d_{\mathrm{cpu}}=0.3\)，迫使控制器调整服务器运行方式，以试图把期望负载维持在 0.57。可以看到，<code>KeepAlive</code> 和 <code>MaxClients</code> 两个参数都会被调整。虽然负载有所降低，但仍然比期望稳态高约 0.2。使用下一节技术可以得到更好的结果。</p>
+<figure class="figure-block"><img alt="图 6.14" loading="lazy" src="../assets/figures/chapter-06/fig-6-14.png"/><figcaption>图 6.14：带 LQR 控制的 Web 服务器。图 (a) 显示在 \(k=10\) ms 施加外部负载变化时的系统状态；图 (b) 显示对应 Web 服务器参数，也就是系统输入。控制器能够把扰动影响降低约 40%。</figcaption></figure>
+<h2 id="6.4-积分作用">6.4 积分作用</h2>
+<p>基于状态反馈的控制器通过仔细标定增益 \(k_r\)，实现对命令信号的正确稳态响应。不过，反馈的主要用途之一，是在存在不确定性时仍然获得良好性能，因此要求我们拥有精确过程模型并不理想。标定的另一种替代方法是使用积分反馈，控制器用一个积分器来提供零稳态误差。第 1.5 节和第 3.1 节已经给出积分反馈的基本概念，这里作更完整的描述和分析。</p>
+<p>积分反馈的基本方法，是在控制器内部创建一个状态，用来计算误差信号的积分，再把这个状态作为反馈项。通过给系统描述增广一个新状态 \(z\) 来实现：</p>
+<div class="math-block">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x\\
+z
+\end{bmatrix}
+=
+\begin{bmatrix}
+Ax+Bu\\
+y-r
+\end{bmatrix}
+=
+\begin{bmatrix}
+Ax+Bu\\
+Cx-r
+\end{bmatrix}.
+\tag{6.28}
+\]</div>
+<p>状态 \(z\) 是实际输出 \(y\) 与期望输出 \(r\) 之差的积分。注意，如果找到一个能稳定系统的补偿器，那么稳态时必然有 \(\dot z=0\)，因此稳态时 \(y=r\)。</p>
+<p>给定增广系统后，像通常一样设计状态空间控制器，控制律取为</p>
+<div class="math-block">\[
+u=-Kx-k_iz+k_rr,
+\tag{6.29}
+\]</div>
+<p>其中 \(K\) 是通常的状态反馈项，\(k_i\) 是积分项，\(k_r\) 用于设置期望稳态的标称输入。系统平衡点满足</p>
+<div class="math-block">\[
+x_e=-(A-BK)^{-1}B(k_rr-k_iz_e).
+\]</div>
+<p>注意，\(z_e\) 的值并不是预先指定的，而是会自动收敛到使 \(\dot z=y-r=0\) 的值。这意味着平衡时输出等于参考值。只要系统稳定，这一点与 \(A,B,K\) 的精确数值无关，而系统稳定可以通过适当选择 \(K\) 和 \(k_i\) 实现。</p>
+<p>最终补偿器为</p>
+<div class="math-block">\[
+u=-Kx-k_iz+k_rr,\qquad
+\frac{dz}{dt}=y-r.
+\]</div>
+<p>这里已经把积分器动态作为控制器规格的一部分。这类补偿器称为动态补偿器，因为它有自己的内部动态。下面例子说明基本方法。</p>
+<h3 id="例-6.10-巡航控制">例 6.10 巡航控制</h3>
+<p>考虑第 3.1 节引入并在例 5.11 中进一步讨论的巡航控制问题。过程在平衡点 \(v_e,u_e\) 附近的线性化动态为</p>
+<div class="math-block">\[
+\frac{dx}{dt}=ax-b_g\theta+bw,\qquad y=v=x+v_e,
+\]</div>
+<p>其中 \(x=v-v_e\)、\(w=u-u_e\)、\(m\) 是汽车质量，\(\theta\) 是道路坡度角。常数 \(a\) 依赖油门特性，见例 5.11。</p>
+<p>如果用积分器增广系统，过程动态变为</p>
+<div class="math-block">\[
+\frac{dx}{dt}=ax-b_g\theta+bw,\qquad
+\frac{dz}{dt}=y-v_r=v_e+x-v_r.
+\]</div>
+<p>写成状态空间形式：</p>
+<div class="math-block">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x\\
+z
+\end{bmatrix}
+=
+\begin{bmatrix}
+a&amp;0\\
+1&amp;0
+\end{bmatrix}
+\begin{bmatrix}
+x\\
+z
+\end{bmatrix}
++
+\begin{bmatrix}
+b\\
+0
+\end{bmatrix}w
++
+\begin{bmatrix}
+-b_g\\
+0
+\end{bmatrix}\theta
++
+\begin{bmatrix}
+0\\
+v_e-v_r
+\end{bmatrix}.
+\]</div>
+<p>注意，当系统处于平衡时，有 \(\dot z=0\)，这意味着车速 \(v=v_e+x\) 应等于期望参考速度 \(v_r\)。控制器取为</p>
+<div class="math-block">\[
+\frac{dz}{dt}=y-v_r,\qquad
+u=-k_px-k_iz+k_rv_r.
+\]</div>
+<p>增益 \(k_p,k_i,k_r\) 将用于稳定系统，并为参考速度提供正确输入。</p>
+<p>假设希望闭环系统具有特征多项式</p>
+<div class="math-block">\[
+\lambda(s)=s^2+a_1s+a_2.
+\]</div>
+<p>令扰动 \(\theta=0\)，闭环系统特征多项式为</p>
+<div class="math-block">\[
+\det(sI-(A-BK))=s^2+(bk_p-a)s+bk_i.
+\]</div>
+<p>因此设</p>
+<div class="math-block">\[
+k_p=\frac{a_1+a}{b},\qquad
+k_i=\frac{a_2}{b},\qquad
+k_r=-\frac{1}{C(A-BK)^{-1}B}=\frac{a}{b}.
+\]</div>
+<p>得到的控制器稳定系统，因此使 \(\dot z=y-v_r\) 趋于零，实现精确跟踪。注意，即使定义系统的参数存在小误差，只要闭环特征值仍然稳定，跟踪误差就会趋于零。因此，前一种方法中通过 \(k_r\) 所要求的精确标定，在这里不再需要。事实上，甚至可以选择 \(k_r=0\)，让反馈控制器完成全部工作。</p>
+<p>积分反馈也可以补偿常值扰动。图 6.15 显示了一次仿真结果，汽车在 \(t=8\) s 遇到坡度 \(\theta=4^\circ\) 的山坡。这个外部扰动不影响系统稳定性，因此汽车速度再次收敛到参考速度。处理常值扰动是带积分反馈控制器的一般性质，见习题 6.4。</p>
+<figure class="figure-block"><img alt="图 6.15" loading="lazy" src="../assets/figures/chapter-06/fig-6-15.png"/><figcaption>图 6.15：使用比例控制和 PI 控制的巡航汽车速度与油门。PI 控制器能够调整油门，补偿山坡影响，并把速度维持在参考值 \(v_r=25\) m/s。</figcaption></figure>
+<h2 id="6.5-延伸阅读">6.5 延伸阅读</h2>
+<p>卡尔曼的奠基性论文 <sup class="citation">[<a href="bibliography.html#ref-113">113</a>]</sup> 讨论了状态模型和状态反馈的重要性，其中状态反馈增益通过求解最小化二次损失函数的优化问题得到。可达性和可观性，也就是第 7 章主题，同样来自卡尔曼 <sup class="citation">[<a href="bibliography.html#ref-115">115</a>]</sup>，也见 <sup class="citation">[<a href="bibliography.html#ref-82">82</a>, <a href="bibliography.html#ref-118">118</a>]</sup>。卡尔曼把可控性定义为到达原点的能力，把可达性定义为到达任意状态的能力 <sup class="citation">[<a href="bibliography.html#ref-117">117</a>]</sup>。需要说明的是，大多数教材使用可控性这个术语来代替可达性，不过我们更偏好后者，因为它更直接描述了能够到达任意状态这一基本性质。</p>
+<p>大多数本科控制教材都包含状态空间系统材料，例如富兰克林、鲍威尔和埃马米-奈尼 <sup class="citation">[<a href="bibliography.html#ref-79">79</a>]</sup> 以及小畑 <sup class="citation">[<a href="bibliography.html#ref-162">162</a>]</sup>。弗里德兰 <sup class="citation">[<a href="bibliography.html#ref-80">80</a>]</sup> 的教材非常详细地讲解了前一章、本章和下一章的内容，也包括最优控制主题。</p>
+<h2 id="习题">习题</h2>
+<p>6.1 双积分器。考虑双积分器。找出一个分段常值控制策略，把系统从原点驱动到状态 \(x=(1,1)\)。</p>
+<p>6.2 从非零初始状态出发的可达性。扩展第 6.1 节中的论证，证明如果系统从零初始状态可达，那么它也从非零初始状态可达。</p>
+<p>6.3 不可达系统。考虑图 6.3 所示系统。把两个系统动态写成</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu,\qquad
+\frac{dz}{dt}=Az+Bu.
+\]</div>
+<p>如果 \(x\) 和 \(z\) 有相同初始条件，那么无论施加什么输入，它们始终具有相同状态。证明这违反可达性的定义，并进一步证明可达性矩阵 \(W_r\) 不是满秩。</p>
+<p>6.4 用积分反馈抑制常值扰动。考虑形如</p>
+<div class="math-block">\[
+\frac{dx}{dt}=Ax+Bu+Fd
+\]</div>
+<p>的线性系统，其中扰动 \(d\) 通过扰动向量 \(F\in\mathbb{R}^n\) 进入系统。证明积分反馈可用于补偿常值扰动，使即使在 \(d\ne0\) 时也能得到零稳态误差。</p>
+<p>6.5 后轮转向自行车。第 3.2 节式 (3.5) 给出了一个简单自行车模型。把该模型中速度符号反过来，可得到后轮转向自行车模型。确定该系统可达的条件，并解释系统不可达的情形。</p>
+<p>6.6 可达标准形的特征多项式。证明可达标准形系统的特征多项式由式 (6.7) 给出，并且</p>
+<div class="math-block">\[
+\frac{d^nz_k}{dt^n}
++a_1\frac{d^{n-1}z_k}{dt^{n-1}}
++\cdots
++a_{n-1}\frac{dz_k}{dt}
++a_nz_k
+=
+\frac{d^{n-k}u}{dt^{n-k}},
+\]</div>
+<p>其中 \(z_k\) 是第 \(k\) 个状态。</p>
+<p>6.7 可达标准形的可达性矩阵。考虑可达标准形系统。证明可达性矩阵的逆为</p>
+<div class="math-block">\[
+\tilde W_r^{-1}=
+\begin{bmatrix}
+1&amp;a_1&amp;a_2&amp;\cdots&amp;a_n\\
+0&amp;1&amp;a_1&amp;\cdots&amp;a_{n-1}\\
+0&amp;0&amp;1&amp;\cdots&amp;a_{n-2}\\
+\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+0&amp;0&amp;0&amp;\cdots&amp;1
+\end{bmatrix}.
+\]</div>
+<p>6.8 不能维持的平衡点。考虑小车上摆的归一化模型</p>
+<div class="math-block">\[
+\frac{d^2x}{dt^2}=u,\qquad
+\frac{d^2\theta}{dt^2}-\sin\theta=u\cos\theta,
+\]</div>
+<p>其中 \(x\) 是小车位置，\(\theta\) 是摆角。能否维持 \(\theta=\theta_0\)、\(\theta_0\ne0\) 的平衡？</p>
+<p>6.9 不可达系统的特征值配置。考虑系统</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+0&amp;1\\
+0&amp;0
+\end{bmatrix}x+
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}u,\qquad
+y=
+\begin{bmatrix}
+1&amp;0
+\end{bmatrix}x,
+\]</div>
+<p>并使用控制律</p>
+<div class="math-block">\[
+u=-k_1x_1-k_2x_2+k_rr.
+\]</div>
+<p>证明该系统的特征值不能被配置到任意值。</p>
+<p>6.10 Cayley-Hamilton 定理。令 \(A\in\mathbb{R}^{n\times n}\) 是一个矩阵，其特征多项式为</p>
+<div class="math-block">\[
+\lambda(s)=\det(sI-A)=s^n+a_1s^{n-1}+\cdots+a_{n-1}s+a_n.
+\]</div>
+<p>证明矩阵满足</p>
+<div class="math-block">\[
+\lambda(A)=A^n+a_1A^{n-1}+\cdots+a_{n-1}A+a_nI=0,
+\]</div>
+<p>并利用这一点证明当 \(k\ge n\) 时，\(A^k\) 可以写成低于 \(n\) 阶的 \(A\) 的幂的组合。</p>
+<p>6.11 电机驱动。考虑习题 2.10 中电机驱动的归一化模型。使用下面归一化参数：</p>
+<div class="math-block">\[
+J_1=10/9,\qquad J_2=10,\qquad c=0.1,\qquad k=1,\qquad k_I=1.
+\]</div>
+<p>验证开环系统特征值为</p>
+<div class="math-block">\[
+0,\quad 0,\quad -0.05\pm i.
+\]</div>
+<p>设计状态反馈，使闭环系统特征值为</p>
+<div class="math-block">\[
+-1,\quad -2,\quad -1\pm i.
+\]</div>
+<p>这个选择意味着振荡特征值会被充分阻尼，并且原点处的特征值被替换为负实轴上的特征值。仿真闭环系统对命令信号阶跃变化以及第二转子扰动转矩阶跃变化的响应。</p>
+<p>6.12 Whipple 自行车模型。考虑第 3.2 节式 (3.7) 给出的 Whipple 自行车模型。该模型在速度 \(v=5\) m/s 时不稳定，开环特征值为</p>
+<div class="math-block">\[
+-1.84,\quad -14.29,\quad 1.30\pm4.60i.
+\]</div>
+<p>求一个控制器的增益，使自行车稳定，并给出闭环特征值</p>
+<div class="math-block">\[
+-2,\quad -10,\quad -2\pm i.
+\]</div>
+<p>仿真系统对 0.002 rad 转向参考阶跃变化的响应。</p>
+<p>6.13 原子力显微镜。考虑例 5.9 中给出的接触模式 AFM 模型：</p>
+<div class="math-block">\[
+\frac{dx}{dt}=
+\begin{bmatrix}
+0&amp;1&amp;0&amp;0\\
+-k/(m_1+m_2)&amp;-c/(m_1+m_2)&amp;1/m_2&amp;0\\
+0&amp;0&amp;0&amp;\omega_3\\
+0&amp;0&amp;-\omega_3&amp;-2\zeta_3\omega_3
+\end{bmatrix}x+
+\begin{bmatrix}
+0\\
+0\\
+0\\
+\omega_3^2
+\end{bmatrix}u,
+\]</div>
+<div class="math-block">\[
+y=\frac{m_2}{m_1+m_2}
+\begin{bmatrix}
+\dfrac{m_1k}{m_1+m_2}&amp;
+\dfrac{m_1c}{m_1+m_2}&amp;
+1&amp;0
+\end{bmatrix}x.
+\]</div>
+<p>使用配套网站上的 MATLAB 脚本 <code>afm_data.m</code> 生成系统矩阵。</p>
+<p>(a) 计算系统可达性矩阵并确定其秩。把时间单位从秒改成毫秒，对模型进行缩放。再次计算可达性矩阵及其秩。</p>
+<p>(b) 找到一个状态反馈控制器，使闭环系统具有阻尼比 0.707 的复极点。使用缩放后的模型进行计算。</p>
+<p>(c) 使用线性二次控制计算状态反馈增益。尝试不同权重。计算 \(q_1=q_2=0\)、\(q_3=q_4=1\)、\(R=1\)、\(\rho=0.1\) 时的增益，并解释结果。再选择 \(q_1=q_2=q_3=q_4=r_1=1\)，考察改变 \(\rho\) 时反馈增益和闭环特征值会怎样变化。这个计算使用缩放后的系统。</p>
+<p>6.14 考虑二阶系统</p>
+<div class="math-block">\[
+\frac{d^2y}{dt^2}+0.5\frac{dy}{dt}+y
+=a\frac{du}{dt}+u.
+\]</div>
+<p>令初始条件为零。</p>
+<p>(a) 证明单位阶跃响应的初始斜率为 \(a\)。讨论当 \(a&lt;0\) 时意味着什么。</p>
+<p>(b) 证明单位阶跃响应上存在一些点对 \(a\) 不变。定性讨论参数 \(a\) 对解的影响。</p>
+<p>(c) 仿真该系统，考察 \(a\) 对上升时间和超调量的影响。</p>
+<p>6.15 Bryson 规则。Bryson 和 Ho <sup class="citation">[<a href="bibliography.html#ref-47">47</a>]</sup> 建议用下面方法选择式 (6.26) 中的矩阵 \(Q_x\) 和 \(Q_u\)。先把 \(Q_x\) 和 \(Q_u\) 选为对角矩阵，其元素为对应变量最大值平方的倒数。然后调整这些元素，在响应时间、阻尼和控制努力之间取得折中。把这个方法应用到习题 6.11 的电机驱动。假设 \(\theta_1\) 和 \(\theta_2\) 的最大值为 1，\(\dot\theta_1\) 和 \(\dot\theta_2\) 的最大值为 2，最大控制信号为 10。仿真闭环系统在 \(\theta_2(0)=1\)、其他状态初值均为 0 时的响应。考察 \(Q_x\) 和 \(Q_u\) 对角元素不同取值的影响。</p>
+
+        </article>
+        <div class="pagination"><a href="chapter-05.html" class="page-btn">← 上一章：线性系统</a><a href="chapter-07.html" class="page-btn">下一章：输出反馈 →</a></div>
+      </main>
+    </div>
+<button id="backToTop" title="回到顶部" type="button">↑</button>
+<script src="../script.js"></script>
+</body>
+</html>
